@@ -1,0 +1,7 @@
+Jueves: Api y plantilla completas(Limpia)
+Viernes: Analisis de requerimientos y Base de datos Completa
+Sabado: Login y Analisis de dibujado de menu y Roles
+Domingo: Roles y dibujado completamente funcional
+Lunes: Todos los formularios terminados
+Martes: Validaciones y diseño
+Miercoles: El proyecto tiene que estar terminado
