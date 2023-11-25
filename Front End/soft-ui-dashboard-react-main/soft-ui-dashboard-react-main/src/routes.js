@@ -37,7 +37,7 @@ Coded by www.creative-tim.com
 
 // Soft UI Dashboard React layouts
 import Dashboard from "layouts/dashboard";
-import blankPage from "layouts/blankpage/blankpage";
+import BlankPageLayout from "layouts/blankpage/BlankPage";
 import Tables from "layouts/tables";
 import Billing from "layouts/billing";
 import VirtualReality from "layouts/virtual-reality";
@@ -56,6 +56,10 @@ import CustomerSupport from "examples/Icons/CustomerSupport";
 import CreditCard from "examples/Icons/CreditCard";
 import Cube from "examples/Icons/Cube";
 
+
+//Custom Icons
+import { Inventory2 } from "@mui/icons-material";
+
 const routes = [
   {
     type: "collapse",
@@ -69,10 +73,10 @@ const routes = [
   {
     type: "collapse",
     name: "Blank Page",
-    key: "Blank Page",
+    key: "blankPage",
     route: "/blankPage",
-    icon: <Shop size="12px" />,
-    component: <blankPage />,
+    icon: <Inventory2 />,
+    component: <BlankPageLayout />,
     noCollapse: true,
   },
   {

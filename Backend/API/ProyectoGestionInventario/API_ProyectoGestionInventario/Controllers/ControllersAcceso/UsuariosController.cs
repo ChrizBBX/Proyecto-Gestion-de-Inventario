@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using API_ProyectoGestionInventario.Models.ModelsAcceso;
+using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProyectoGestionInventario.BusinessLogic.Services.AccesoServices;
@@ -22,7 +23,8 @@ namespace API_ProyectoGestionInventario.Controllers.ControllersAcceso
         [HttpPost("Login")]
         public IActionResult Insertar(string usuario,string contrasenia)
         {
-            var datos = _accesoServices.Login(usuario,contrasenia);
+            var data = _accesoServices.Login(usuario, contrasenia);
+            var datos = _mapper.Map<UsuariosViewModel>(data.Data);
             return Ok(datos);
         }
     }

@@ -50,6 +50,10 @@
       {
          "Name": "[inve].[tbSucursales]",
          "ObjectType": 0
+      },
+      {
+         "Name": "[acce].[VW_tbRolesPorPantalla]",
+         "ObjectType": 3
       }
    ],
    "UiHint": "desktop-0n2ta4e\\sqlexpress.ProyectoGestionInventario_BD.dbo",

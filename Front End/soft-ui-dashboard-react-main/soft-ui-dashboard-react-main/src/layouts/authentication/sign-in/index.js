@@ -33,67 +33,132 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 // Images
 import curved9 from "assets/images/curved-images/curved-6.jpg";
 
+//Material
+import { FormControl } from "@mui/material";
+
+// Validaciones 
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { Controller, useForm } from 'react-hook-form';
+
+//Alertas
+import { ToastError, ToastSuccessPersonalizado, ToastWarningCamposVacios, ToastWarningPersonalizado } from "../../../assets/Toast/Toast"
+
+//Servicios
+import LoginService from "../LoginService/LoginService";
+
+//Navegacion
+import { useNavigate } from "react-router-dom";
+
+//Hooks
+import { useEffect } from "react";
+
 function SignIn() {
   const [rememberMe, setRememberMe] = useState(true);
 
+  useEffect(() => {
+    localStorage.clear()
+  }, [])
+  const loginservice = LoginService()
+  const Navegate = useNavigate()
+
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
+  const validacion = async () => {
+    handleSubmit()
+    trigger()
+    if (isValid) {
+      const response = await loginservice.login(modelo.username, modelo.password)
+      if (response?.usua_Id > 0) {
+        Navegate('/dashboard')
+        ToastSuccessPersonalizado(`Exito. Bienvenido ${response.usua_Usuario}.`)
+        localStorage.setItem('user_data', response);
+      } else {
+        ToastWarningPersonalizado('Advertencia. Usuario o Contraseña incorrecto.')
+      }
+      console.log(response)
+    } else {
+      ToastWarningCamposVacios()
+    }
+  }
+
+  const defaultValues = {
+    username: "",
+    password: ""
+  };
+
+  const LoginSchema = yup.object().shape({
+    username: yup.string().required(),
+    password: yup.string().required(),
+  });
+
+  //Tab 1 useform
+  const { handleSubmit, reset, control, formState, watch, setValue, trigger } = useForm({
+    defaultValues,
+    mode: "all",
+    resolver: yupResolver(LoginSchema),
+  });
+  const { isValid, errors } = formState;
+  const modelo = watch()
+
   return (
-    <CoverLayout
-      title="Welcome back"
-      description="Enter your email and password to sign in"
-      image={curved9}
-    >
-      <SoftBox component="form" role="form">
-        <SoftBox mb={2}>
-          <SoftBox mb={1} ml={0.5}>
-            <SoftTypography component="label" variant="caption" fontWeight="bold">
-              Email
-            </SoftTypography>
+    <form onSubmit={handleSubmit((_data) => { })}>
+      <CoverLayout
+        title="InventoNext"
+        description="La mejor solucion en Gestion de Inventario."
+        image={curved9}
+        top={15}
+      >
+        <SoftBox component="form" role="form">
+          <SoftBox mb={2}>
+            <SoftBox mb={1} ml={0.5}>
+              <SoftTypography component="label" variant="caption" fontWeight="bold">
+                Usuario
+              </SoftTypography>
+            </SoftBox>
+            <Controller render={({ field }) => (
+              <SoftInput {...field} error={!!errors.username} type="text" placeholder="Usuario" />
+            )}
+              control={control}
+              name="username"
+            />
           </SoftBox>
-          <SoftInput type="email" placeholder="Email" />
-        </SoftBox>
-        <SoftBox mb={2}>
-          <SoftBox mb={1} ml={0.5}>
-            <SoftTypography component="label" variant="caption" fontWeight="bold">
-              Password
-            </SoftTypography>
+          <SoftBox mb={2}>
+            <SoftBox mb={1} ml={0.5}>
+              <SoftTypography component="label" variant="caption" fontWeight="bold">
+                Contraseña
+              </SoftTypography>
+            </SoftBox>
+            <Controller render={({ field }) => (
+              <SoftInput {...field} error={!!errors.password} type="password" placeholder="Contraseña" />
+            )}
+              control={control}
+              name="password"
+            />
           </SoftBox>
-          <SoftInput type="password" placeholder="Password" />
-        </SoftBox>
-        <SoftBox display="flex" alignItems="center">
-          <Switch checked={rememberMe} onChange={handleSetRememberMe} />
-          <SoftTypography
-            variant="button"
-            fontWeight="regular"
-            onClick={handleSetRememberMe}
-            sx={{ cursor: "pointer", userSelect: "none" }}
-          >
-            &nbsp;&nbsp;Remember me
-          </SoftTypography>
-        </SoftBox>
-        <SoftBox mt={4} mb={1}>
-          <SoftButton variant="gradient" color="info" fullWidth>
-            sign in
-          </SoftButton>
-        </SoftBox>
-        <SoftBox mt={3} textAlign="center">
-          <SoftTypography variant="button" color="text" fontWeight="regular">
-            Don&apos;t have an account?{" "}
+          <SoftBox display="flex" alignItems="center">
+            <Switch checked={rememberMe} onChange={handleSetRememberMe} />
             <SoftTypography
-              component={Link}
-              to="/authentication/sign-up"
               variant="button"
-              color="info"
-              fontWeight="medium"
-              textGradient
+              fontWeight="regular"
+              onClick={handleSetRememberMe}
+              sx={{ cursor: "pointer", userSelect: "none" }}
             >
-              Sign up
+              &nbsp;&nbsp;Recuerdame 
             </SoftTypography>
-          </SoftTypography>
+          </SoftBox>
+          <SoftBox mt={4} mb={1}>
+            <SoftButton onClick={() => {
+              validacion()
+            }} variant="gradient" color="info" fullWidth>
+              Iniciar Sesion
+            </SoftButton>
+          </SoftBox>
+          <SoftBox mt={3} textAlign="center">
+          </SoftBox>
         </SoftBox>
-      </SoftBox>
-    </CoverLayout>
+      </CoverLayout>
+    </form>
   );
 }
 

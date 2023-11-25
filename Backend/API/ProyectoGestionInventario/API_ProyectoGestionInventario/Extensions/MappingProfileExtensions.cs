@@ -1,4 +1,5 @@
-﻿using API_ProyectoGestionInventario.Models.ModelsInventario;
+﻿using API_ProyectoGestionInventario.Models.ModelsAcceso;
+using API_ProyectoGestionInventario.Models.ModelsInventario;
 using AutoMapper;
 using ProyectoGestionInventario.Entities.Entities;
 using System;
@@ -12,8 +13,13 @@ namespace ProyectoGestionInventario.API.Extentions
     {
         public MappingProfileExtensions()
         {
-            #region
+            #region Inventario
             CreateMap<ProductosViewModel, tbProductos>().ReverseMap();
+            #endregion
+
+            #region Acceso
+            CreateMap<PantallasViewModel, tbPantallas>().ReverseMap();
+            CreateMap<UsuariosViewModel, tbUsuarios>().ReverseMap();
             #endregion
         }
     }

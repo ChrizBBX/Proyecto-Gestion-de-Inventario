@@ -8,8 +8,10 @@ namespace ProyectoGestionInventario.DataAccess
 {
     public class ScriptsDataBase
     {
-        #region
+        #region Acceso
         public static string UDP_Login = "acce.UDP_Login";
+        public static string UDP_tbPantallas_Select = "acce.UDP_tbPantallas_Select";
+        public static string UDP_tbRolesPorPantalla_Filtrado = "acce.UDP_tbRolesPorPantalla_Filtrado";
         #endregion
 
         #region Inventario

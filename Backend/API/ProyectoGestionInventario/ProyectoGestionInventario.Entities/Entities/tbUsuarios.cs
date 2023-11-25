@@ -31,6 +31,8 @@ public partial class tbUsuarios
 
     public virtual ICollection<tbUsuarios> Inverseusua_UsuarioModificacionNavigation { get; set; } = new List<tbUsuarios>();
 
+    public virtual tbRoles role { get; set; }
+
     public virtual ICollection<tbLotes> tbLotesusua_UsuarioCreacionNavigation { get; set; } = new List<tbLotes>();
 
     public virtual ICollection<tbLotes> tbLotesusua_UsuarioModificacionNavigation { get; set; } = new List<tbLotes>();

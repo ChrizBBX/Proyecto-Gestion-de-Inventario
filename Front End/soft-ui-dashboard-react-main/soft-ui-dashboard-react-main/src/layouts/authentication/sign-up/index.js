@@ -41,18 +41,47 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Controller, useForm } from 'react-hook-form';
 
+//Alertas
+import  {ToastError,ToastSuccessPersonalizado,ToastWarningCamposVacios,ToastWarningPersonalizado} from "../../../assets/Toast/Toast"
+
+//Servicios
+import LoginService from "../LoginService/LoginService";
+
+//Navegacion
+import { useNavigate } from "react-router-dom";
+
+//Hooks
+import { useEffect } from "react";
+
+
+
 function SignUp() {
+  useEffect(() => {
+    localStorage.clear()
+  },[])
+
+  const loginservice = LoginService()
+  const Navegate = useNavigate()
   const [agreement, setAgremment] = useState(true);
 
   const handleSetAgremment = () => setAgremment(!agreement);
 
-  const validacion = async =>{
-    if(isValid){
-      console.log('vamos por buen camino')
-    }else{
-      console.log('no puede ser')
+  const validacion = async () => {
+    if (isValid) {
+     const response = await loginservice.login(modelo.username,modelo.password)
+     if(response?.usua_Id > 0){
+      Navegate('/dashboard')
+      ToastSuccessPersonalizado('Exito. Bienvenido.')
+      localStorage.setItem('user_data', response);
+     }else{
+      ToastWarningPersonalizado('Advertencia. Usuario o Contraseña incorrecto.')
+     }
+     console.log(response)
+    } else {
+      ToastWarningCamposVacios()
     }
   }
+
   const defaultValues = {
     username: "",
     password: ""
@@ -63,64 +92,66 @@ function SignUp() {
     password: yup.string().required(),
   });
 
-    //Tab 1 useform
-    const { handleSubmit, reset, control, formState, watch, setValue } = useForm({
-      defaultValues,
-      mode: "all",
-      resolver: yupResolver(LoginSchema),
-    });
-    const { isValid, errors } = formState;
-    const modelo = watch()
+  //Tab 1 useform
+  const { handleSubmit, reset, control, formState, watch, setValue } = useForm({
+    defaultValues,
+    mode: "all",
+    resolver: yupResolver(LoginSchema),
+  });
+  const { isValid, errors } = formState;
+  const modelo = watch()
 
   return (
-    <BasicLayout
-    title="InventoNext"
-    description="La mejor solucion en Administracion de Inventario."
+<div>
+<BasicLayout
+      title="InventoNext"
+      description="La mejor solucion en Administracion de Inventario."
       image={curved6}
     >
-      <form onSubmit={handleSubmit((_data) => {})}>
-      <Card>
-        <SoftBox p={3} mb={1} textAlign="center">
-          <SoftTypography variant="h5" fontWeight="medium">
-            Iniciar Sesion
-          </SoftTypography>
-        </SoftBox>
-        <SoftBox mb={2}>
-        </SoftBox>
-        <SoftBox pt={2} pb={3} px={3}>
-          <SoftBox component="form" role="form">
-            <SoftBox mb={2}>
-            <Controller render={({field}) => (
-                 <SoftInput {...field}  error={!!errors.username} type="text" placeholder="Usuario" />
-              )} 
-              control={control}
-              name="username"
-              />
-            </SoftBox>
-            <SoftBox mb={2}>
-              <Controller render={({field}) => (
-                 <SoftInput {...field}  error={!!errors.password} type="password" placeholder="Contraseña" />
-              )} 
-              control={control}
-              name="password"
-              />
-            </SoftBox>
-            <SoftBox display="flex" alignItems="center">
-            </SoftBox>
-            <SoftBox mt={4} mb={1}>
-              <SoftButton onClick={() => {
-                validacion()
-              }} variant="gradient" color="dark" fullWidth>
-                sign up
-              </SoftButton>
-            </SoftBox>
-            <SoftBox mt={3} textAlign="center">
+      <form onSubmit={handleSubmit((_data) => { })}>
+        <Card>
+          <SoftBox p={3} mb={1} textAlign="center">
+            <SoftTypography variant="h5" fontWeight="medium">
+              Iniciar Sesion
+            </SoftTypography>
+          </SoftBox>
+          <SoftBox mb={2}>
+          </SoftBox>
+          <SoftBox pt={2} pb={3} px={3}>
+            <SoftBox component="form" role="form">
+              <SoftBox mb={2}>
+                <Controller render={({ field }) => (
+                  <SoftInput {...field} error={!!errors.username} type="text" placeholder="Usuario" />
+                )}
+                  control={control}
+                  name="username"
+                />
+              </SoftBox>
+              <SoftBox mb={2}>
+                <Controller render={({ field }) => (
+                  <SoftInput {...field} error={!!errors.password} type="password" placeholder="Contraseña" />
+                )}
+                  control={control}
+                  name="password"
+                />
+              </SoftBox>
+              <SoftBox display="flex" alignItems="center">
+              </SoftBox>
+              <SoftBox mt={4} mb={1}>
+                <SoftButton onClick={() => {
+                  validacion()
+                }} variant="gradient" color="dark" fullWidth>
+                  sign up
+                </SoftButton>
+              </SoftBox>
+              <SoftBox mt={3} textAlign="center">
+              </SoftBox>
             </SoftBox>
           </SoftBox>
-        </SoftBox>
-      </Card>
+        </Card>
       </form>
     </BasicLayout>
+</div>
   );
 }
 

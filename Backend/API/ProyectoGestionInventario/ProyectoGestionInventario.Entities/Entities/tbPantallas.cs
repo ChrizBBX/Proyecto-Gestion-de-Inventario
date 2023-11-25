@@ -17,9 +17,13 @@ public partial class tbPantallas
 
     public string pant_Icono { get; set; }
 
-    public string pant_Categoria { get; set; }
+    public string pant_Componente { get; set; }
 
-    public string pant_Esquema { get; set; }
+    public string pant_PropiedadExtra { get; set; }
+
+    public string pant_PropiedadExtra_1 { get; set; }
+
+    public string pant_PropiedadExtra_2 { get; set; }
 
     public int usua_UsuarioCreacion { get; set; }
 

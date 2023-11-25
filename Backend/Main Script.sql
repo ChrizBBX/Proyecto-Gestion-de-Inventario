@@ -54,8 +54,8 @@ CREATE TABLE acce.tbRoles
 (
 role_Id INT IDENTITY(1,1),
 role_Descripcion NVARCHAR(500) NOT NULL,
-usua_UsuarioCreacion INT NOT NULL,
 
+usua_UsuarioCreacion INT NOT NULL,
 role_FechaCreacion DATETIME NOT NULL,
 usua_UsuarioModificacion INT,
 role_FechaModificacion DATETIME,
@@ -68,7 +68,17 @@ CONSTRAINT FK_acce_tbRoles_usua_UsuarioModificacion_acce_tbUsuarios_usua_Id FORE
 )
 
 GO
+/*Se inserta un rol para poder hacer el constraint de roles con usuarios*/
+INSERT INTO acce.tbRoles
+(role_Descripcion, usua_UsuarioCreacion, role_FechaCreacion, usua_UsuarioModificacion, role_FechaModificacion)
+VALUES('Jefe de Bodega',1,GETDATE(),NULL,NULL)
 
+GO
+
+ALTER TABLE acce.tbUsuarios
+ADD CONSTRAINT FK_acce_tbRoles_role_Id_acce_tbUsuarios_role_Id FOREIGN KEY(role_Id) REFERENCES acce.tbRoles(role_Id)
+
+GO
 CREATE TABLE acce.tbPantallas
 (
 pant_Id INT IDENTITY(1,1),
@@ -76,8 +86,10 @@ pant_Nombre NVARCHAR(250),
 pant_Url NVARCHAR(250),
 pant_Identificador NVARCHAR(MAX),
 pant_Icono NVARCHAR(250),
-pant_Categoria NVARCHAR(300),
-pant_Esquema NVARCHAR(100),
+pant_Componente NVARCHAR(300),
+pant_PropiedadExtra NVARCHAR(100),
+pant_PropiedadExtra_1 NVARCHAR(100),
+pant_PropiedadExtra_2 NVARCHAR(100),
 
 usua_UsuarioCreacion INT NOT NULL,
 pant_FechaCreacion DATETIME NOT NULL,

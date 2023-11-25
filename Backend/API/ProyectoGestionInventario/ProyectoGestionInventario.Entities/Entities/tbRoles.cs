@@ -21,6 +21,8 @@ public partial class tbRoles
 
     public bool? role_Estado { get; set; }
 
+    public virtual ICollection<tbUsuarios> tbUsuarios { get; set; } = new List<tbUsuarios>();
+
     public virtual tbUsuarios usua_UsuarioCreacionNavigation { get; set; }
 
     public virtual tbUsuarios usua_UsuarioModificacionNavigation { get; set; }

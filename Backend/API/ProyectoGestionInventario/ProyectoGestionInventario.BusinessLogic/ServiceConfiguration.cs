@@ -22,6 +22,8 @@ namespace ProyectoGestionInventario.BussinessLogic
             #region Acceso
             //Usuarios
             services.AddScoped<UsuariosRepository>();
+            services.AddScoped<PantallasRepository>();
+            services.AddScoped<RolesPorPantallaViewRepository>();
             #endregion
 
             #region Inventario

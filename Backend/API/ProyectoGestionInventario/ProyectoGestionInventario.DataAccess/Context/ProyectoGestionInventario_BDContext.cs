@@ -9,9 +9,8 @@ namespace ProyectoGestionInventario.DataAccess.Context;
 
 public partial class ProyectoGestionInventario_BDContext : DbContext
 {
-    public ProyectoGestionInventario_BDContext()
-    {
-    }
+
+    public virtual DbSet<VW_tbRolesPorPantalla> VW_tbRolesPorPantalla { get; set; }
 
     public virtual DbSet<tbLotes> tbLotes { get; set; }
 
@@ -33,6 +32,20 @@ public partial class ProyectoGestionInventario_BDContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<VW_tbRolesPorPantalla>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("VW_tbRolesPorPantalla", "acce");
+
+            entity.Property(e => e.pant_Nombre).HasMaxLength(250);
+            entity.Property(e => e.role_Descripcion)
+                .IsRequired()
+                .HasMaxLength(500);
+            entity.Property(e => e.ropa_FechaCreacion).HasColumnType("datetime");
+            entity.Property(e => e.ropa_FechaModificacion).HasColumnType("datetime");
+        });
+
         modelBuilder.Entity<tbLotes>(entity =>
         {
             entity.HasKey(e => e.lote_Id).HasName("PK_inve_tbLotes_lote_Id");
@@ -65,8 +78,7 @@ public partial class ProyectoGestionInventario_BDContext : DbContext
 
             entity.ToTable("tbPantallas", "acce");
 
-            entity.Property(e => e.pant_Categoria).HasMaxLength(300);
-            entity.Property(e => e.pant_Esquema).HasMaxLength(100);
+            entity.Property(e => e.pant_Componente).HasMaxLength(300);
             entity.Property(e => e.pant_Estado)
                 .IsRequired()
                 .HasDefaultValueSql("((1))");
@@ -74,6 +86,9 @@ public partial class ProyectoGestionInventario_BDContext : DbContext
             entity.Property(e => e.pant_FechaModificacion).HasColumnType("datetime");
             entity.Property(e => e.pant_Icono).HasMaxLength(250);
             entity.Property(e => e.pant_Nombre).HasMaxLength(250);
+            entity.Property(e => e.pant_PropiedadExtra).HasMaxLength(100);
+            entity.Property(e => e.pant_PropiedadExtra_1).HasMaxLength(100);
+            entity.Property(e => e.pant_PropiedadExtra_2).HasMaxLength(100);
             entity.Property(e => e.pant_Url).HasMaxLength(250);
 
             entity.HasOne(d => d.usua_UsuarioCreacionNavigation).WithMany(p => p.tbPantallasusua_UsuarioCreacionNavigation)
@@ -258,6 +273,11 @@ public partial class ProyectoGestionInventario_BDContext : DbContext
             entity.Property(e => e.usua_Usuario)
                 .IsRequired()
                 .HasMaxLength(500);
+
+            entity.HasOne(d => d.role).WithMany(p => p.tbUsuarios)
+                .HasForeignKey(d => d.role_Id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_acce_tbRoles_role_Id_acce_tbUsuarios_role_Id");
 
             entity.HasOne(d => d.usua_UsuarioCreacionNavigation).WithMany(p => p.Inverseusua_UsuarioCreacionNavigation)
                 .HasForeignKey(d => d.usua_UsuarioCreacion)

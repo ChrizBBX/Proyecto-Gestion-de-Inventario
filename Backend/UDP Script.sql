@@ -1,3 +1,5 @@
+-------------------------------*Usuarios*----------------------------------
+
 /*INSERT Usuarios*/
 CREATE OR ALTER PROCEDURE acce.UDP_tbUsuarios_Insert 
 (
@@ -47,3 +49,45 @@ BEGIN
 	ELSE
 	SELECT 'Resultado' + ERROR_MESSAGE() 
 	END
+
+GO
+-------------------------------* Fin Usuarios*----------------------------------
+
+-------------------------------*Pantallas*----------------------------------
+/*Pantallas Listar*/
+CREATE OR ALTER PROCEDURE acce.UDP_tbPantallas_Select
+AS
+BEGIN
+	SELECT 
+	pant_Id, pant_Nombre, pant_Url, pant_Identificador, pant_Icono, pant_Componente, pant_PropiedadExtra, pant_PropiedadExtra_1, pant_PropiedadExtra_2, usua_UsuarioCreacion, pant_FechaCreacion, usua_UsuarioModificacion, pant_FechaModificacion, pant_Estado
+	FROM [acce].[tbPantallas]
+END
+-------------------------------*Fin Pantallas*----------------------------------
+
+-------------------------------*RolesPorPantalla*----------------------------------
+GO
+/*Vista para Roles por pantalla*/
+CREATE VIEW acce.VW_tbRolesPorPantalla
+AS
+SELECT
+ropa_Id, ropa.role_Id,role.role_Descripcion, ropa.pant_Id,pant.pant_Nombre , ropa.usua_UsuarioCreacion, ropa_FechaCreacion, ropa.usua_UsuarioModificacion, ropa_FechaModificacion, ropa_Estado
+FROM acce.tbRolesPorPantalla ropa 
+INNER JOIN acce.tbRoles role
+ON ropa.role_Id = role.role_Id 
+INNER JOIN acce.tbPantallas pant
+ON ropa.pant_Id = pant.pant_Id
+
+/*Filtrar PantallasPorRoles*/
+GO
+CREATE OR ALTER PROCEDURE acce.UDP_tbRolesPorPantalla_Filtrado
+@role_Id INT
+AS
+BEGIN
+	BEGIN TRY
+		SELECT * FROM acce.VW_tbRolesPorPantalla WHERE role_Id = @role_Id
+	END TRY
+	BEGIN CATCH
+		SELECT 'Resultado' + ERROR_MESSAGE()
+	END CATCH
+END
+-------------------------------*Fin RolesPorPantalla*----------------------------------

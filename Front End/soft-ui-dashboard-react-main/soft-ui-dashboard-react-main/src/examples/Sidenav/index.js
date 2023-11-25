@@ -43,16 +43,25 @@ import sidenavLogoLabel from "examples/Sidenav/styles/sidenav";
 // Soft UI Dashboard React context
 import { useSoftUIController, setMiniSidenav } from "context";
 
+//Navegacion
+import { useNavigate } from "react-router-dom";
+
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const [controller, dispatch] = useSoftUIController();
   const { miniSidenav, transparentSidenav } = controller;
   const location = useLocation();
   const { pathname } = location;
   const collapseName = pathname.split("/").slice(1)[0];
+  const Navegate = useNavigate()
 
   const closeSidenav = () => setMiniSidenav(dispatch, true);
 
   useEffect(() => {
+
+    const user_data = localStorage.getItem('user_data') ?? 'no';
+    if(user_data == 'no'){
+      Navegate("/")
+    }
     // A function that sets the mini state of the sidenav.
     function handleMiniSidenav() {
       setMiniSidenav(dispatch, window.innerWidth < 1200);
