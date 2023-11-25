@@ -13,22 +13,260 @@ public partial class ProyectoGestionInventario_BDContext : DbContext
     {
     }
 
-    public ProyectoGestionInventario_BDContext(DbContextOptions<ProyectoGestionInventario_BDContext> options)
-        : base(options)
-    {
-    }
+    public virtual DbSet<tbLotes> tbLotes { get; set; }
 
-    public virtual DbSet<tbProducto> tbProductos { get; set; }
+    public virtual DbSet<tbPantallas> tbPantallas { get; set; }
+
+    public virtual DbSet<tbProductos> tbProductos { get; set; }
+
+    public virtual DbSet<tbRoles> tbRoles { get; set; }
+
+    public virtual DbSet<tbRolesPorPantalla> tbRolesPorPantalla { get; set; }
+
+    public virtual DbSet<tbSalidas> tbSalidas { get; set; }
+
+    public virtual DbSet<tbSalidasDetalles> tbSalidasDetalles { get; set; }
+
+    public virtual DbSet<tbSucursales> tbSucursales { get; set; }
+
+    public virtual DbSet<tbUsuarios> tbUsuarios { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<tbProducto>(entity =>
+        modelBuilder.Entity<tbLotes>(entity =>
+        {
+            entity.HasKey(e => e.lote_Id).HasName("PK_inve_tbLotes_lote_Id");
+
+            entity.ToTable("tbLotes", "inve");
+
+            entity.Property(e => e.lote_Estado).HasDefaultValueSql("((1))");
+            entity.Property(e => e.lote_FechaCreacion).HasColumnType("datetime");
+            entity.Property(e => e.lote_FechaModificacion).HasColumnType("datetime");
+            entity.Property(e => e.lote_FechaVencimiento).HasColumnType("datetime");
+
+            entity.HasOne(d => d.prod).WithMany(p => p.tbLotes)
+                .HasForeignKey(d => d.prod_Id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_inve_tbProductos_prod_Id_inve_tbLotes_prod_Id");
+
+            entity.HasOne(d => d.usua_UsuarioCreacionNavigation).WithMany(p => p.tbLotesusua_UsuarioCreacionNavigation)
+                .HasForeignKey(d => d.usua_UsuarioCreacion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_inve_tbLotes_usua_UsuarioCreacion_acce_tbUsuarios_usua_Id");
+
+            entity.HasOne(d => d.usua_UsuarioModificacionNavigation).WithMany(p => p.tbLotesusua_UsuarioModificacionNavigation)
+                .HasForeignKey(d => d.usua_UsuarioModificacion)
+                .HasConstraintName("FK_inve_tbLotes_usua_UsuarioModificacion_acce_tbUsuarios_usua_Id");
+        });
+
+        modelBuilder.Entity<tbPantallas>(entity =>
+        {
+            entity.HasKey(e => e.pant_Id).HasName("PK_acce_tbPantllas_pant_Id");
+
+            entity.ToTable("tbPantallas", "acce");
+
+            entity.Property(e => e.pant_Categoria).HasMaxLength(300);
+            entity.Property(e => e.pant_Esquema).HasMaxLength(100);
+            entity.Property(e => e.pant_Estado)
+                .IsRequired()
+                .HasDefaultValueSql("((1))");
+            entity.Property(e => e.pant_FechaCreacion).HasColumnType("datetime");
+            entity.Property(e => e.pant_FechaModificacion).HasColumnType("datetime");
+            entity.Property(e => e.pant_Icono).HasMaxLength(250);
+            entity.Property(e => e.pant_Nombre).HasMaxLength(250);
+            entity.Property(e => e.pant_Url).HasMaxLength(250);
+
+            entity.HasOne(d => d.usua_UsuarioCreacionNavigation).WithMany(p => p.tbPantallasusua_UsuarioCreacionNavigation)
+                .HasForeignKey(d => d.usua_UsuarioCreacion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_acce_tbPantallas_usua_UsuarioCreacion_acce_tbUsuarios_usua_Id");
+
+            entity.HasOne(d => d.usua_UsuarioModificacionNavigation).WithMany(p => p.tbPantallasusua_UsuarioModificacionNavigation)
+                .HasForeignKey(d => d.usua_UsuarioModificacion)
+                .HasConstraintName("FK_acce_tbPantallas_usua_UsuarioModificacion_acce_tbUsuarios_usua_Id");
+        });
+
+        modelBuilder.Entity<tbProductos>(entity =>
         {
             entity.HasKey(e => e.prod_Id).HasName("PK_inve_tbProductos_prod_Id");
 
             entity.ToTable("tbProductos", "inve");
 
-            entity.Property(e => e.prod_Descripcion).HasMaxLength(500);
+            entity.HasIndex(e => e.prod_Descripcion, "UQ_inve_tbProductos_prod_Descripcion").IsUnique();
+
+            entity.Property(e => e.prod_Descripcion)
+                .IsRequired()
+                .HasMaxLength(500);
+            entity.Property(e => e.prod_Estado).HasDefaultValueSql("((1))");
+            entity.Property(e => e.prod_FechaCreacion).HasColumnType("datetime");
+            entity.Property(e => e.prod_FechaModificacion).HasColumnType("datetime");
+            entity.Property(e => e.prod_Precio).HasColumnType("decimal(18, 2)");
+
+            entity.HasOne(d => d.usua_UsuarioCreacionNavigation).WithMany(p => p.tbProductosusua_UsuarioCreacionNavigation)
+                .HasForeignKey(d => d.usua_UsuarioCreacion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_inve_tbProductos_usua_UsuarioCreacion_acce_tbUsuarios_usua_Id");
+
+            entity.HasOne(d => d.usua_UsuarioModificacionNavigation).WithMany(p => p.tbProductosusua_UsuarioModificacionNavigation)
+                .HasForeignKey(d => d.usua_UsuarioModificacion)
+                .HasConstraintName("FK_inve_tbProductos_usua_UsuarioModificacion_acce_tbUsuarios_usua_Id");
+        });
+
+        modelBuilder.Entity<tbRoles>(entity =>
+        {
+            entity.HasKey(e => e.role_Id).HasName("PK_acce_tbRoles_role_Id");
+
+            entity.ToTable("tbRoles", "acce");
+
+            entity.HasIndex(e => e.role_Descripcion, "UQ_acce_tbRoles_role_Descripcion").IsUnique();
+
+            entity.Property(e => e.role_Descripcion)
+                .IsRequired()
+                .HasMaxLength(500);
+            entity.Property(e => e.role_Estado).HasDefaultValueSql("((1))");
+            entity.Property(e => e.role_FechaCreacion).HasColumnType("datetime");
+            entity.Property(e => e.role_FechaModificacion).HasColumnType("datetime");
+
+            entity.HasOne(d => d.usua_UsuarioCreacionNavigation).WithMany(p => p.tbRolesusua_UsuarioCreacionNavigation)
+                .HasForeignKey(d => d.usua_UsuarioCreacion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_acce_tbRoles_usua_UsuarioCreacion_acce_tbUsuarios_usua_Id");
+
+            entity.HasOne(d => d.usua_UsuarioModificacionNavigation).WithMany(p => p.tbRolesusua_UsuarioModificacionNavigation)
+                .HasForeignKey(d => d.usua_UsuarioModificacion)
+                .HasConstraintName("FK_acce_tbRoles_usua_UsuarioModificacion_acce_tbUsuarios_usua_Id");
+        });
+
+        modelBuilder.Entity<tbRolesPorPantalla>(entity =>
+        {
+            entity.HasKey(e => e.ropa_Id).HasName("PK_acce_tbRolesPorPantalla_ropa_Id");
+
+            entity.ToTable("tbRolesPorPantalla", "acce");
+
+            entity.Property(e => e.ropa_Estado).HasDefaultValueSql("((1))");
+            entity.Property(e => e.ropa_FechaCreacion).HasColumnType("datetime");
+            entity.Property(e => e.ropa_FechaModificacion).HasColumnType("datetime");
+
+            entity.HasOne(d => d.usua_UsuarioCreacionNavigation).WithMany(p => p.tbRolesPorPantallausua_UsuarioCreacionNavigation)
+                .HasForeignKey(d => d.usua_UsuarioCreacion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_acce_tbRolesPorPantalla_usua_UsuarioCreacion_acce_tbUsuarios_usua_Id");
+
+            entity.HasOne(d => d.usua_UsuarioModificacionNavigation).WithMany(p => p.tbRolesPorPantallausua_UsuarioModificacionNavigation)
+                .HasForeignKey(d => d.usua_UsuarioModificacion)
+                .HasConstraintName("FK_acce_tbRolesPorPantalla_usua_UsuarioModificacion_acce_tbUsuarios_usua_Id");
+        });
+
+        modelBuilder.Entity<tbSalidas>(entity =>
+        {
+            entity.HasKey(e => e.sali_Id).HasName("PK_inve_tbSalidas_sali_Id");
+
+            entity.ToTable("tbSalidas", "inve");
+
+            entity.Property(e => e.saliFechaModificacion).HasColumnType("datetime");
+            entity.Property(e => e.sali_FechaCreacion).HasColumnType("datetime");
+            entity.Property(e => e.sucu_SalidaEstado).HasMaxLength(200);
+
+            entity.HasOne(d => d.sucu).WithMany(p => p.tbSalidas)
+                .HasForeignKey(d => d.sucu_Id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_inve_tbSalidas_sucu_Id_inve_tbSucursales_sucu_Id");
+
+            entity.HasOne(d => d.usua).WithMany(p => p.tbSalidasusua)
+                .HasForeignKey(d => d.usua_Id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_inve_tbSalidas_usua_Id_acce_tbUsuarios_usua_Id");
+
+            entity.HasOne(d => d.usua_UsuarioCreacionNavigation).WithMany(p => p.tbSalidasusua_UsuarioCreacionNavigation)
+                .HasForeignKey(d => d.usua_UsuarioCreacion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_inve_tbSalidas_usua_UsuarioCreacion_acce_tbUsuarios_usua_Id");
+
+            entity.HasOne(d => d.usua_UsuarioModificacionNavigation).WithMany(p => p.tbSalidasusua_UsuarioModificacionNavigation)
+                .HasForeignKey(d => d.usua_UsuarioModificacion)
+                .HasConstraintName("FK_inve_tbSalidas_usua_UsuarioModificacion_acce_tbUsuarios_usua_Id");
+        });
+
+        modelBuilder.Entity<tbSalidasDetalles>(entity =>
+        {
+            entity.HasKey(e => e.sade_Id).HasName("PK_inve_tbSalidasDetalles_sade_Id");
+
+            entity.ToTable("tbSalidasDetalles", "inve");
+
+            entity.Property(e => e.sade_FechaCreacion).HasColumnType("datetime");
+            entity.Property(e => e.sade_FechaModificacion).HasColumnType("datetime");
+
+            entity.HasOne(d => d.lote).WithMany(p => p.tbSalidasDetalles)
+                .HasForeignKey(d => d.lote_Id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_inve_tbSalidasDetalles_lote_Id_inve_tbLotes_lote_Id");
+
+            entity.HasOne(d => d.sali).WithMany(p => p.tbSalidasDetalles)
+                .HasForeignKey(d => d.sali_Id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_inve_tbSalidasDetalles_sali_Id_inve_tbSalidas_sali_Id");
+
+            entity.HasOne(d => d.usua_UsuarioCreacionNavigation).WithMany(p => p.tbSalidasDetallesusua_UsuarioCreacionNavigation)
+                .HasForeignKey(d => d.usua_UsuarioCreacion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_inve_tbSalidasDetalles_usua_UsuarioCreacion_acce_tbUsuarios_usua_Id");
+
+            entity.HasOne(d => d.usua_UsuarioModificacionNavigation).WithMany(p => p.tbSalidasDetallesusua_UsuarioModificacionNavigation)
+                .HasForeignKey(d => d.usua_UsuarioModificacion)
+                .HasConstraintName("FK_inve_tbSalidasDetalles_usua_UsuarioModificacion_acce_tbUsuarios_usua_Id");
+        });
+
+        modelBuilder.Entity<tbSucursales>(entity =>
+        {
+            entity.HasKey(e => e.sucu_Id).HasName("PK_inve_tbSucursales_sucu_Id");
+
+            entity.ToTable("tbSucursales", "inve");
+
+            entity.HasIndex(e => e.sucu_Descripcion, "UQ_inve_tbSucursales_sucu_Descripcion").IsUnique();
+
+            entity.Property(e => e.sucu_Descripcion)
+                .IsRequired()
+                .HasMaxLength(500);
+            entity.Property(e => e.sucu_Estado).HasDefaultValueSql("((1))");
+            entity.Property(e => e.sucu_FechaCreacion).HasColumnType("datetime");
+            entity.Property(e => e.sucu_FechaModificacion).HasColumnType("datetime");
+
+            entity.HasOne(d => d.usua_UsuarioCreacionNavigation).WithMany(p => p.tbSucursalesusua_UsuarioCreacionNavigation)
+                .HasForeignKey(d => d.usua_UsuarioCreacion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_inve_tbSucursales_usua_UsuarioCreacion_acce_tbUsuarios_usua_Id");
+
+            entity.HasOne(d => d.usua_UsuarioModificacionNavigation).WithMany(p => p.tbSucursalesusua_UsuarioModificacionNavigation)
+                .HasForeignKey(d => d.usua_UsuarioModificacion)
+                .HasConstraintName("FK_inve_tbSucursales_usua_UsuarioModificacion_acce_tbUsuarios_usua_Id");
+        });
+
+        modelBuilder.Entity<tbUsuarios>(entity =>
+        {
+            entity.HasKey(e => e.usua_Id).HasName("PK_acce_tbUsuarios_usua_Id");
+
+            entity.ToTable("tbUsuarios", "acce");
+
+            entity.HasIndex(e => e.usua_Usuario, "UQ_acce_tbUsuarios_usua_Usuario").IsUnique();
+
+            entity.Property(e => e.usua_Contrasenia).IsRequired();
+            entity.Property(e => e.usua_Estado)
+                .IsRequired()
+                .HasDefaultValueSql("((1))");
+            entity.Property(e => e.usua_FechaCreacion).HasColumnType("datetime");
+            entity.Property(e => e.usua_FechaModificacion).HasColumnType("datetime");
+            entity.Property(e => e.usua_Usuario)
+                .IsRequired()
+                .HasMaxLength(500);
+
+            entity.HasOne(d => d.usua_UsuarioCreacionNavigation).WithMany(p => p.Inverseusua_UsuarioCreacionNavigation)
+                .HasForeignKey(d => d.usua_UsuarioCreacion)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_acce_tbUsuarios_usua_UsuarioCreacion_acce_tbUsuarios_usua_Id");
+
+            entity.HasOne(d => d.usua_UsuarioModificacionNavigation).WithMany(p => p.Inverseusua_UsuarioModificacionNavigation)
+                .HasForeignKey(d => d.usua_UsuarioModificacion)
+                .HasConstraintName("FK_acce_tbUsuarios_usua_UsuarioModificacion_acce_tbUsuarios_usua_Id");
         });
 
         OnModelCreatingPartial(modelBuilder);

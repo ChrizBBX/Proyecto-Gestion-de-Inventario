@@ -13,7 +13,7 @@ namespace ProyectoGestionInventario.API.Extentions
         public MappingProfileExtensions()
         {
             #region
-            CreateMap<ProductosViewModel, tbProducto>().ReverseMap();
+            CreateMap<ProductosViewModel, tbProductos>().ReverseMap();
             #endregion
         }
     }

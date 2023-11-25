@@ -36,81 +36,90 @@ import Separator from "layouts/authentication/components/Separator";
 // Images
 import curved6 from "assets/images/curved-images/curved14.jpg";
 
+// Validaciones 
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { Controller, useForm } from 'react-hook-form';
+
 function SignUp() {
   const [agreement, setAgremment] = useState(true);
 
   const handleSetAgremment = () => setAgremment(!agreement);
 
+  const validacion = async =>{
+    if(isValid){
+      console.log('vamos por buen camino')
+    }else{
+      console.log('no puede ser')
+    }
+  }
+  const defaultValues = {
+    username: "",
+    password: ""
+  };
+
+  const LoginSchema = yup.object().shape({
+    username: yup.string().required(),
+    password: yup.string().required(),
+  });
+
+    //Tab 1 useform
+    const { handleSubmit, reset, control, formState, watch, setValue } = useForm({
+      defaultValues,
+      mode: "all",
+      resolver: yupResolver(LoginSchema),
+    });
+    const { isValid, errors } = formState;
+    const modelo = watch()
+
   return (
     <BasicLayout
-      title="Welcome!"
-      description="Use these awesome forms to login or create new account in your project for free."
+    title="InventoNext"
+    description="La mejor solucion en Administracion de Inventario."
       image={curved6}
     >
+      <form onSubmit={handleSubmit((_data) => {})}>
       <Card>
         <SoftBox p={3} mb={1} textAlign="center">
           <SoftTypography variant="h5" fontWeight="medium">
-            Register with
+            Iniciar Sesion
           </SoftTypography>
         </SoftBox>
         <SoftBox mb={2}>
-          <Socials />
         </SoftBox>
-        <Separator />
         <SoftBox pt={2} pb={3} px={3}>
           <SoftBox component="form" role="form">
             <SoftBox mb={2}>
-              <SoftInput placeholder="Name" />
+            <Controller render={({field}) => (
+                 <SoftInput {...field}  error={!!errors.username} type="text" placeholder="Usuario" />
+              )} 
+              control={control}
+              name="username"
+              />
             </SoftBox>
             <SoftBox mb={2}>
-              <SoftInput type="email" placeholder="Email" />
-            </SoftBox>
-            <SoftBox mb={2}>
-              <SoftInput type="password" placeholder="Password" />
+              <Controller render={({field}) => (
+                 <SoftInput {...field}  error={!!errors.password} type="password" placeholder="Contraseña" />
+              )} 
+              control={control}
+              name="password"
+              />
             </SoftBox>
             <SoftBox display="flex" alignItems="center">
-              <Checkbox checked={agreement} onChange={handleSetAgremment} />
-              <SoftTypography
-                variant="button"
-                fontWeight="regular"
-                onClick={handleSetAgremment}
-                sx={{ cursor: "poiner", userSelect: "none" }}
-              >
-                &nbsp;&nbsp;I agree the&nbsp;
-              </SoftTypography>
-              <SoftTypography
-                component="a"
-                href="#"
-                variant="button"
-                fontWeight="bold"
-                textGradient
-              >
-                Terms and Conditions
-              </SoftTypography>
             </SoftBox>
             <SoftBox mt={4} mb={1}>
-              <SoftButton variant="gradient" color="dark" fullWidth>
+              <SoftButton onClick={() => {
+                validacion()
+              }} variant="gradient" color="dark" fullWidth>
                 sign up
               </SoftButton>
             </SoftBox>
             <SoftBox mt={3} textAlign="center">
-              <SoftTypography variant="button" color="text" fontWeight="regular">
-                Already have an account?&nbsp;
-                <SoftTypography
-                  component={Link}
-                  to="/authentication/sign-in"
-                  variant="button"
-                  color="dark"
-                  fontWeight="bold"
-                  textGradient
-                >
-                  Sign in
-                </SoftTypography>
-              </SoftTypography>
             </SoftBox>
           </SoftBox>
         </SoftBox>
       </Card>
+      </form>
     </BasicLayout>
   );
 }

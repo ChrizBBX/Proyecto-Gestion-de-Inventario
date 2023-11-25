@@ -10,31 +10,31 @@ using System.Threading.Tasks;
 
 namespace ProyectoGestionInventario.DataAccess.Repositories.Inve
 {
-    public class ProductosRepository : IRepository<tbProducto>
+    public class ProductosRepository : IRepository<tbProductos>
     {
-        public RequestStatus Delete(tbProducto item)
+        public RequestStatus Delete(tbProductos item)
         {
             throw new NotImplementedException();
         }
 
-        public tbProducto Find(int? id)
+        public tbProductos Find(int? id)
         {
             throw new NotImplementedException();
         }
 
-        public RequestStatus Insert(tbProducto item)
+        public RequestStatus Insert(tbProductos item)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<tbProducto> List()
+        public IEnumerable<tbProductos> List()
         {
             using var db = new SqlConnection(ProyectoGestionInventario.ConnectionString);
             var parametros = new DynamicParameters();
-            return db.Query<tbProducto>(ScriptsDataBase.SelectProductos, null, commandType: CommandType.StoredProcedure);
+            return db.Query<tbProductos>(ScriptsDataBase.SelectProductos, null, commandType: CommandType.StoredProcedure);
         }
 
-        public RequestStatus Update(tbProducto item)
+        public RequestStatus Update(tbProductos item)
         {
             throw new NotImplementedException();
         }

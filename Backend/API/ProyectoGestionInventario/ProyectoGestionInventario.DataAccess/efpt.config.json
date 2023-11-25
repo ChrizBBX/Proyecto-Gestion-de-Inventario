@@ -16,7 +16,39 @@
    "T4TemplatePath": null,
    "Tables": [
       {
+         "Name": "[acce].[tbPantallas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[acce].[tbRoles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[acce].[tbRolesPorPantalla]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[acce].[tbUsuarios]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[inve].[tbLotes]",
+         "ObjectType": 0
+      },
+      {
          "Name": "[inve].[tbProductos]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[inve].[tbSalidas]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[inve].[tbSalidasDetalles]",
+         "ObjectType": 0
+      },
+      {
+         "Name": "[inve].[tbSucursales]",
          "ObjectType": 0
       }
    ],
@@ -30,7 +62,7 @@
    "UseFluentApiOnly": true,
    "UseHandleBars": false,
    "UseHierarchyId": false,
-   "UseInflector": true,
+   "UseInflector": false,
    "UseLegacyPluralizer": false,
    "UseManyToManyEntity": false,
    "UseNoDefaultConstructor": false,
