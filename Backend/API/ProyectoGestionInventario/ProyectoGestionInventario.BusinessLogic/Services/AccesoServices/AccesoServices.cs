@@ -40,12 +40,12 @@ namespace ProyectoGestionInventario.BusinessLogic.Services.AccesoServices
         #endregion
 
         #region RolesPorPantallasView
-        public ServiceResult Pantallas_Listar(int? id)
+        public ServiceResult Pantallas_Listar_Find(int? id)
         {
             var result = new ServiceResult();
             try
             {
-                var map = _rolesPorPantallaViewRepository.Find(id);
+                var map = _rolesPorPantallaViewRepository.Listar_Find(id);
                 return result.Ok(map);
             }
             catch (Exception ex)

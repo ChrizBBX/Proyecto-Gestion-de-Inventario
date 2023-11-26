@@ -52,6 +52,11 @@ import { useNavigate } from "react-router-dom";
 
 //Hooks
 import { useEffect } from "react";
+import routes from "routes";
+
+//Custom Icons
+import { Inventory2 } from "@mui/icons-material";
+import { Category } from "@mui/icons-material";
 
 function SignIn() {
   const [rememberMe, setRememberMe] = useState(true);
@@ -59,26 +64,31 @@ function SignIn() {
   useEffect(() => {
     localStorage.clear()
   }, [])
+
   const loginservice = LoginService()
   const Navegate = useNavigate()
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
 
   const validacion = async () => {
-    handleSubmit()
-    trigger()
-    if (isValid) {
-      const response = await loginservice.login(modelo.username, modelo.password)
-      if (response?.usua_Id > 0) {
-        Navegate('/dashboard')
-        ToastSuccessPersonalizado(`Exito. Bienvenido ${response.usua_Usuario}.`)
-        localStorage.setItem('user_data', response);
+    try {
+      handleSubmit()
+      trigger()
+      if (isValid) {
+        const response = await loginservice.login(modelo.username, modelo.password)
+        if (response?.usua_Id > 0) {
+          Navegate('/dashboard')
+          ToastSuccessPersonalizado(`Exito. Bienvenido ${response.usua_Usuario}.`)
+          localStorage.setItem('user_data', response);
+        } else {
+          ToastWarningPersonalizado('Advertencia. Usuario o Contraseña incorrecto.')
+        }
+        console.log(response)
       } else {
-        ToastWarningPersonalizado('Advertencia. Usuario o Contraseña incorrecto.')
+        ToastWarningCamposVacios()
       }
-      console.log(response)
-    } else {
-      ToastWarningCamposVacios()
+    } catch (error) {
+      console.log('algo trono en validacion login', error)
     }
   }
 
@@ -144,7 +154,7 @@ function SignIn() {
               onClick={handleSetRememberMe}
               sx={{ cursor: "pointer", userSelect: "none" }}
             >
-              &nbsp;&nbsp;Recuerdame 
+              &nbsp;&nbsp;Recuerdame
             </SoftTypography>
           </SoftBox>
           <SoftBox mt={4} mb={1}>

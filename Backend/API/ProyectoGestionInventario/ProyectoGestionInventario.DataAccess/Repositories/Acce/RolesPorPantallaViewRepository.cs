@@ -18,7 +18,7 @@ namespace ProyectoGestionInventario.DataAccess.Repositories.Acce
             throw new NotImplementedException();
         }
 
-        public VW_tbRolesPorPantalla Find(int? id)
+        public IEnumerable<VW_tbRolesPorPantalla> Listar_Find(int? id)
         {
             using var db = new SqlConnection(ProyectoGestionInventario.ConnectionString);
 
@@ -26,8 +26,7 @@ namespace ProyectoGestionInventario.DataAccess.Repositories.Acce
 
             parametros.Add("@role_Id", id, DbType.String, ParameterDirection.Input);
 
-            var resultado = db.QueryFirst<VW_tbRolesPorPantalla>(ScriptsDataBase.UDP_tbRolesPorPantalla_Filtrado, parametros, commandType: CommandType.StoredProcedure);
-            return resultado;
+            return db.Query<VW_tbRolesPorPantalla>(ScriptsDataBase.UDP_tbRolesPorPantalla_Filtrado, parametros, commandType: CommandType.StoredProcedure);
         }
 
         public RequestStatus Insert(VW_tbRolesPorPantalla item)
@@ -41,6 +40,11 @@ namespace ProyectoGestionInventario.DataAccess.Repositories.Acce
         }
 
         public RequestStatus Update(VW_tbRolesPorPantalla item)
+        {
+            throw new NotImplementedException();
+        }
+
+        VW_tbRolesPorPantalla IRepository<VW_tbRolesPorPantalla>.Find(int? id)
         {
             throw new NotImplementedException();
         }

@@ -26,5 +26,12 @@ namespace API_ProyectoGestionInventario.Controllers.ControllersAcceso
             var datos = _mapper.Map<IEnumerable<PantallasViewModel>>(data.Data);
             return Ok(datos);
         }
+
+        [HttpGet("ListarPorRol")]
+        public IActionResult ListarPorRol(int? id)
+        {
+            var data = _accesoServices.Pantallas_Listar_Find(id);
+            return Ok(data);
+        }
     }
 }

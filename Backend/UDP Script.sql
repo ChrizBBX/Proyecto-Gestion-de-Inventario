@@ -70,7 +70,16 @@ GO
 CREATE VIEW acce.VW_tbRolesPorPantalla
 AS
 SELECT
-ropa_Id, ropa.role_Id,role.role_Descripcion, ropa.pant_Id,pant.pant_Nombre , ropa.usua_UsuarioCreacion, ropa_FechaCreacion, ropa.usua_UsuarioModificacion, ropa_FechaModificacion, ropa_Estado
+ropa_Id, ropa.role_Id,role.role_Descripcion, 
+ropa.pant_Id,pant.pant_Nombre,
+pant.pant_Url,pant.pant_Identificador,
+pant.pant_Icono,pant.pant_Componente,
+pant.pant_PropiedadExtra,pant.pant_PropiedadExtra_1,
+pant.pant_PropiedadExtra_2,
+ropa.usua_UsuarioCreacion, ropa_FechaCreacion, 
+ropa.usua_UsuarioModificacion, 
+ropa_FechaModificacion, ropa_Estado
+
 FROM acce.tbRolesPorPantalla ropa 
 INNER JOIN acce.tbRoles role
 ON ropa.role_Id = role.role_Id 

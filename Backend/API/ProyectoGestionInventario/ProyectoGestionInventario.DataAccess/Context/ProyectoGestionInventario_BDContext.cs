@@ -38,7 +38,13 @@ public partial class ProyectoGestionInventario_BDContext : DbContext
                 .HasNoKey()
                 .ToView("VW_tbRolesPorPantalla", "acce");
 
+            entity.Property(e => e.pant_Componente).HasMaxLength(300);
+            entity.Property(e => e.pant_Icono).HasMaxLength(250);
             entity.Property(e => e.pant_Nombre).HasMaxLength(250);
+            entity.Property(e => e.pant_PropiedadExtra).HasMaxLength(100);
+            entity.Property(e => e.pant_PropiedadExtra_1).HasMaxLength(100);
+            entity.Property(e => e.pant_PropiedadExtra_2).HasMaxLength(100);
+            entity.Property(e => e.pant_Url).HasMaxLength(250);
             entity.Property(e => e.role_Descripcion)
                 .IsRequired()
                 .HasMaxLength(500);

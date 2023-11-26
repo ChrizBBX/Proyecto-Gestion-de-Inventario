@@ -13,7 +13,9 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import React from 'react';
+
 
 // react-router-dom components
 import { useLocation, NavLink } from "react-router-dom";
@@ -46,22 +48,61 @@ import { useSoftUIController, setMiniSidenav } from "context";
 //Navegacion
 import { useNavigate } from "react-router-dom";
 
+//Servicios
+import LoginService from "layouts/authentication/LoginService/LoginService";
+
+//Custom Icons
+import { Inventory2 } from "@mui/icons-material";
+import { Category } from "@mui/icons-material";
+import { FaGoogle } from 'react-icons/fa';
+
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
   const [controller, dispatch] = useSoftUIController();
+  const loginservice = LoginService()
   const { miniSidenav, transparentSidenav } = controller;
   const location = useLocation();
   const { pathname } = location;
+  const [rutas, setRutas] = useState([{
+    type: "collapse",
+    name: "Dashboard",
+    key: "dashboard",
+    route: "/dashboard",
+    icon: '<Shop size="12px" />',
+    component: '<Dashboard />',
+    noCollapse: true,
+  }])
   const collapseName = pathname.split("/").slice(1)[0];
   const Navegate = useNavigate()
 
   const closeSidenav = () => setMiniSidenav(dispatch, true);
 
   useEffect(() => {
-
-    const user_data = localStorage.getItem('user_data') ?? 'no';
-    if(user_data == 'no'){
-      Navegate("/")
+    const fetchData = async () => {
+      const user_data = localStorage.getItem('user_data') ?? 'no';
+      if (user_data == 'no') {
+        Navegate("/")
+      } else {
+        const getpantllas = await loginservice.getPantallas(1)
+        console.log('peticion de pantallas', getpantllas)
+        const nuevasRutas = getpantllas.map((pantalla) => ({
+          type: "collapse",
+          name: `${pantalla.pant_Nombre}`,
+          key: `${pantalla.pant_Identificador}`,
+          route: `${pantalla.pant_Url}`,
+          icon: <span className="material-symbols-outlined">{pantalla.pant_Icono}</span>,
+          component: 'React.createElement(pantalla.pant_Componente)',
+          noCollapse: true,
+        }))
+        console.log('rutitas nuevas', nuevasRutas)
+        const rutasfinal = [...routes, ...nuevasRutas]
+        console.log('rutas final', rutasfinal)
+        setRutas(rutasfinal)
+      }
     }
+    fetchData()
+  }, [])
+
+  useEffect(() => {
     // A function that sets the mini state of the sidenav.
     function handleMiniSidenav() {
       setMiniSidenav(dispatch, window.innerWidth < 1200);
@@ -80,7 +121,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
   }, [dispatch, location]);
 
   // Render all the routes from the routes.js (All the visible items on the Sidenav)
-  const renderRoutes = routes.map(({ type, name, icon, title, noCollapse, key, route, href }) => {
+  const renderRoutes = rutas.map(({ type, name, icon, title, noCollapse, key, route, href }) => {
     let returnValue;
 
     if (type === "collapse") {

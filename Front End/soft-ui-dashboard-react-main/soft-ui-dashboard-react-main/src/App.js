@@ -93,7 +93,13 @@ export default function App() {
   useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
+    try {
+
+    } catch (error) {
+      console.log('error push rotues', error)
+    }
   }, [pathname]);
+
 
   const getRoutes = (allRoutes) =>
     allRoutes.map((route) => {

@@ -17,6 +17,20 @@ public partial class VW_tbRolesPorPantalla
 
     public string pant_Nombre { get; set; }
 
+    public string pant_Url { get; set; }
+
+    public string pant_Identificador { get; set; }
+
+    public string pant_Icono { get; set; }
+
+    public string pant_Componente { get; set; }
+
+    public string pant_PropiedadExtra { get; set; }
+
+    public string pant_PropiedadExtra_1 { get; set; }
+
+    public string pant_PropiedadExtra_2 { get; set; }
+
     public int usua_UsuarioCreacion { get; set; }
 
     public DateTime ropa_FechaCreacion { get; set; }
