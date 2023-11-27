@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("API_ProyectoGestionInventario")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+49f9f4a08893594d03702307f3c7ab91c493f12c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1507d8dcf4d017e6d58e189131668ecc0701d8b7")]
 [assembly: System.Reflection.AssemblyProductAttribute("API_ProyectoGestionInventario")]
 [assembly: System.Reflection.AssemblyTitleAttribute("API_ProyectoGestionInventario")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

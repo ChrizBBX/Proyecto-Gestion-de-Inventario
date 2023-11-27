@@ -1,5 +1,7 @@
 ﻿using ProyectoGestionInventario.BussinessLogic;
+using ProyectoGestionInventario.DataAccess.Repositories.Acce;
 using ProyectoGestionInventario.DataAccess.Repositories.Inve;
+using ProyectoGestionInventario.Entities.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,19 +19,32 @@ namespace ProyectoGestionInventario.BusinessLogic.Services.InventarioServices
             _productosRepository = productosRepository;
         }
 
-        #region Inventario
-
-        public ServiceResult ListarProductos()
+        #region Productos
+        public ServiceResult Productos_Listar()
         {
             var result = new ServiceResult();
             try
             {
-                var list = _productosRepository.List();
-                return result.Ok(list);
+                var map = _productosRepository.List();
+                return result.Ok(map);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return result.Error(e.Message);
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult Productos_Insertar(tbProductos item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _productosRepository.Insert(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
             }
         }
         #endregion

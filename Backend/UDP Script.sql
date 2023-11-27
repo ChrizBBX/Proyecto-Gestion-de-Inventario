@@ -93,10 +93,51 @@ CREATE OR ALTER PROCEDURE acce.UDP_tbRolesPorPantalla_Filtrado
 AS
 BEGIN
 	BEGIN TRY
-		SELECT * FROM acce.VW_tbRolesPorPantalla WHERE role_Id = @role_Id
+		IF @role_Id = 1
+		BEGIN
+			SELECT * FROM acce.tbPantallas
+		END
+		ELSE
+		BEGIN
+			SELECT * FROM acce.VW_tbRolesPorPantalla WHERE role_Id = @role_Id
+		END
 	END TRY
 	BEGIN CATCH
 		SELECT 'Resultado' + ERROR_MESSAGE()
 	END CATCH
 END
 -------------------------------*Fin RolesPorPantalla*----------------------------------
+
+-------------------------------*Productos*----------------------------------
+GO
+/*Productos SELECT*/
+CREATE OR ALTER PROCEDURE inve.UDP_tbProductos_Select
+AS
+BEGIN
+	SELECT 
+	prod_Id, prod_Descripcion, prod_Precio, usua_UsuarioCreacion, prod_FechaCreacion, usua_UsuarioModificacion, prod_FechaModificacion, prod_Estado
+	FROM inve.tbProductos
+END
+
+GO
+/*Productos CREATE*/
+CREATE OR ALTER PROCEDURE inve.UDP_tbProductos_Insert
+@prod_Descripcion NVARCHAR(500),
+@prod_Precio DECIMAL(18,2),
+@usua_UsuarioCreacion INT,
+@prod_FechaCreacion DATETIME
+AS
+BEGIN
+	BEGIN TRY
+		INSERT INTO inve.tbProductos
+		(prod_Descripcion, prod_Precio, usua_UsuarioCreacion, prod_FechaCreacion, usua_UsuarioModificacion, prod_FechaModificacion)
+		VALUES
+		(@prod_Descripcion,@prod_Precio,@usua_UsuarioCreacion,@prod_FechaCreacion,NULL,NULL)
+		
+		SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Resultado' + ERROR_MESSAGE()
+	END CATCH
+END
+-------------------------------*Fin Productos*----------------------------------

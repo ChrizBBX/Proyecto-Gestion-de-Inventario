@@ -15,7 +15,8 @@ namespace ProyectoGestionInventario.DataAccess
         #endregion
 
         #region Inventario
-        public static string SelectProductos = "inve.UDP_tbProductos_List";
+        public static string UDP_tbProductos_Select = "inve.UDP_tbProductos_Select";
+        public static string UDP_tbProductos_Insert = "inve.UDP_tbProductos_Insert";
         #endregion
 
     }
