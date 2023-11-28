@@ -37,5 +37,21 @@ namespace API_ProyectoGestionInventario.Controllers.ControllersInventario
             var data = _inventarioServices.Productos_Insertar(mapeo);
             return Ok(data);
         }
+
+        [HttpPost("Actualizar")]
+        public IActionResult Actualizar(ProductosViewModel item)
+        {
+            var mapeo = _mapper.Map<tbProductos>(item);
+            var data = _inventarioServices.Productos_Actualizar(mapeo);
+            return Ok(data);
+        }
+
+        [HttpPost("Eliminar")]
+        public IActionResult Eliminar(ProductosViewModel item)
+        {
+            var mapeo = _mapper.Map<tbProductos>(item);
+            var data = _inventarioServices.Productos_Eliminar(mapeo);
+            return Ok(data);
+        }
     }
 }

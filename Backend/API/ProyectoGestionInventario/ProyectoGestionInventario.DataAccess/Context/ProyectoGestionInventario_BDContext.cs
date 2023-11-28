@@ -10,6 +10,8 @@ namespace ProyectoGestionInventario.DataAccess.Context;
 public partial class ProyectoGestionInventario_BDContext : DbContext
 {
 
+    public virtual DbSet<VW_tbLotes> VW_tbLotes { get; set; }
+
     public virtual DbSet<VW_tbRolesPorPantalla> VW_tbRolesPorPantalla { get; set; }
 
     public virtual DbSet<tbLotes> tbLotes { get; set; }
@@ -32,6 +34,27 @@ public partial class ProyectoGestionInventario_BDContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<VW_tbLotes>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("VW_tbLotes", "inve");
+
+            entity.Property(e => e.lote_FechaCreacion).HasColumnType("datetime");
+            entity.Property(e => e.lote_FechaModificacion).HasColumnType("datetime");
+            entity.Property(e => e.lote_FechaVencimiento).HasColumnType("datetime");
+            entity.Property(e => e.prod_Descripcion)
+                .IsRequired()
+                .HasMaxLength(500);
+            entity.Property(e => e.prod_Precio).HasColumnType("decimal(18, 2)");
+            entity.Property(e => e.usua_UsuarioCrecion_Usuario)
+                .IsRequired()
+                .HasMaxLength(500);
+            entity.Property(e => e.usua_UsuarioModificacion_Usuario)
+                .IsRequired()
+                .HasMaxLength(500);
+        });
+
         modelBuilder.Entity<VW_tbRolesPorPantalla>(entity =>
         {
             entity

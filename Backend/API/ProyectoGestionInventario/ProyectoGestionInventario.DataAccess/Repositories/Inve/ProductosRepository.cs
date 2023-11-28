@@ -14,7 +14,13 @@ namespace ProyectoGestionInventario.DataAccess.Repositories.Inve
     {
         public RequestStatus Delete(tbProductos item)
         {
-            throw new NotImplementedException();
+            using var db = new SqlConnection(ProyectoGestionInventario.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@prod_Id", item.prod_Id, DbType.String, ParameterDirection.Input);
+            var resultado = db.QueryFirst<string>(ScriptsDataBase.UDP_tbProductos_Delete, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = resultado;
+            return result;
         }
 
         public tbProductos Find(int? id)
@@ -45,7 +51,17 @@ namespace ProyectoGestionInventario.DataAccess.Repositories.Inve
 
         public RequestStatus Update(tbProductos item)
         {
-            throw new NotImplementedException();
+            using var db = new SqlConnection(ProyectoGestionInventario.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@prod_Id", item.prod_Id, DbType.String, ParameterDirection.Input);
+            parametros.Add("@prod_Descripcion", item.prod_Descripcion, DbType.String, ParameterDirection.Input);
+            parametros.Add("@prod_Precio", item.prod_Precio, DbType.String, ParameterDirection.Input);
+            parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.String, ParameterDirection.Input);
+            parametros.Add("@prod_FechaModificacion", item.prod_FechaModificacion, DbType.DateTime, ParameterDirection.Input);
+            var resultado = db.QueryFirst<string>(ScriptsDataBase.UDP_tbProductos_Update, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = resultado;
+            return result;
         }
     }
 }

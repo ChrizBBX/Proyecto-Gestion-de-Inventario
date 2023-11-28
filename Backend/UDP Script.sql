@@ -117,9 +117,11 @@ BEGIN
 	SELECT 
 	prod_Id, prod_Descripcion, prod_Precio, usua_UsuarioCreacion, prod_FechaCreacion, usua_UsuarioModificacion, prod_FechaModificacion, prod_Estado
 	FROM inve.tbProductos
+	WHERE prod_Estado = 1	
 END
 
 GO
+
 /*Productos CREATE*/
 CREATE OR ALTER PROCEDURE inve.UDP_tbProductos_Insert
 @prod_Descripcion NVARCHAR(500),
@@ -129,15 +131,112 @@ CREATE OR ALTER PROCEDURE inve.UDP_tbProductos_Insert
 AS
 BEGIN
 	BEGIN TRY
-		INSERT INTO inve.tbProductos
-		(prod_Descripcion, prod_Precio, usua_UsuarioCreacion, prod_FechaCreacion, usua_UsuarioModificacion, prod_FechaModificacion)
-		VALUES
-		(@prod_Descripcion,@prod_Precio,@usua_UsuarioCreacion,@prod_FechaCreacion,NULL,NULL)
-		
+		IF NOT EXISTS (SELECT prod_Descripcion FROM inve.tbProductos WHERE prod_Descripcion = @prod_Descripcion AND prod_Estado = 1)
+			BEGIN
+				INSERT INTO inve.tbProductos
+				(prod_Descripcion, prod_Precio, usua_UsuarioCreacion, prod_FechaCreacion, usua_UsuarioModificacion, prod_FechaModificacion)
+				VALUES
+				(@prod_Descripcion,@prod_Precio,@usua_UsuarioCreacion,@prod_FechaCreacion,NULL,NULL)
+				
+				SELECT 1
+			END
+		ELSE IF EXISTS (SELECT prod_Descripcion FROM inve.tbProductos WHERE prod_Descripcion = @prod_Descripcion AND prod_Estado = 0)
+			BEGIN
+				UPDATE inve.tbProductos
+				SET prod_Descripcion = @prod_Descripcion,
+					prod_Precio = @prod_Precio,
+					usua_UsuarioModificacion = @usua_UsuarioCreacion,
+					prod_FechaModificacion = @prod_FechaCreacion,
+					prod_Estado = 1
+				WHERE prod_Descripcion = @prod_Descripcion
+				SELECT 1
+			END
+		ELSE 
+			SELECT 2
+	END TRY
+	BEGIN CATCH
+		SELECT 'Resultado' + ERROR_MESSAGE()
+	END CATCH
+END
+
+GO
+
+/*Productos UPDATE*/
+CREATE OR ALTER PROCEDURE inve.UDP_tbProductos_Update
+@prod_Id INT,
+@prod_Descripcion NVARCHAR(500),
+@prod_Precio DECIMAL(18,2),
+@usua_UsuarioModificacion INT,
+@prod_FechaModificacion DATETIME
+AS
+BEGIN
+	BEGIN TRY
+		IF EXISTS (SELECT prod_Id FROM inve.tbProductos WHERE prod_Descripcion = @prod_Descripcion AND prod_Estado IN (0, 1) AND prod_Id != @prod_Id)
+			BEGIN
+				SELECT 2
+			END	
+		ELSE
+			BEGIN
+				UPDATE inve.tbProductos
+				SET prod_Descripcion = @prod_Descripcion,
+					prod_Precio = @prod_Precio,
+					usua_UsuarioModificacion = @usua_UsuarioModificacion,
+					prod_FechaModificacion = @prod_FechaModificacion,
+					prod_Estado = 1
+				WHERE prod_Id = @prod_Id 
+				SELECT 1
+			END
+	END TRY
+	BEGIN CATCH	
+		SELECT 'Resultado: ' + ERROR_MESSAGE()
+	END CATCH
+END
+
+
+GO
+/*Productos Delete*/
+CREATE OR ALTER PROCEDURE inve.UDP_tbProductos_Delete
+@prod_Id INT
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE inve.tbProductos
+		SET prod_Estado = 0
+		WHERE prod_Id = @prod_Id
 		SELECT 1
 	END TRY
 	BEGIN CATCH
 		SELECT 'Resultado' + ERROR_MESSAGE()
 	END CATCH
 END
+GO
 -------------------------------*Fin Productos*----------------------------------
+
+-------------------------------*Lotes*----------------------------------
+
+/*Lotes View*/	
+CREATE VIEW inve.VW_tbLotes
+AS
+SELECT 
+lote_Id, lote.prod_Id,prod_Descripcion,prod_Precio, 
+lote_Cantidad, lote_FechaVencimiento, 
+lote.usua_UsuarioCreacion,creador.usua_Usuario AS usua_UsuarioCrecion_Usuario, 
+lote_FechaCreacion, lote.usua_UsuarioModificacion, modificador.usua_Usuario AS usua_UsuarioModificacion_Usuario,  
+lote_FechaModificacion, lote_Estado
+FROM inve.tbLotes lote INNER JOIN inve.tbProductos prod
+ON lote.prod_Id = prod.prod_Id INNER JOIN acce.tbUsuarios creador
+ON lote.usua_UsuarioCreacion = creador.usua_Id LEFT JOIN acce.tbUsuarios modificador
+ON lote.usua_UsuarioModificacion = modificador.usua_Id
+
+GO
+
+/*Lotes Select*/
+CREATE OR ALTER PROCEDURE inve.UDP_tbLotes_Select
+AS
+BEGIN
+	SELECT  * FROM inve.VW_tbLotes WHERE lote_Estado = 1
+END
+
+
+
+-------------------------------*Fin Lotes*----------------------------------

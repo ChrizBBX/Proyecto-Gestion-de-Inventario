@@ -54,6 +54,10 @@
       {
          "Name": "[acce].[VW_tbRolesPorPantalla]",
          "ObjectType": 3
+      },
+      {
+         "Name": "[inve].[VW_tbLotes]",
+         "ObjectType": 3
       }
    ],
    "UiHint": "desktop-0n2ta4e\\sqlexpress.ProyectoGestionInventario_BD.dbo",
