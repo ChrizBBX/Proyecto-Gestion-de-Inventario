@@ -17,6 +17,8 @@ public partial class VW_tbLotes
 
     public int lote_Cantidad { get; set; }
 
+    public decimal? lote_Costo { get; set; }
+
     public DateTime lote_FechaVencimiento { get; set; }
 
     public int usua_UsuarioCreacion { get; set; }
@@ -32,4 +34,8 @@ public partial class VW_tbLotes
     public DateTime? lote_FechaModificacion { get; set; }
 
     public bool? lote_Estado { get; set; }
+
+    public int? Cantidad_Total { get; set; }
+
+    public int? Costo_Total { get; set; }
 }

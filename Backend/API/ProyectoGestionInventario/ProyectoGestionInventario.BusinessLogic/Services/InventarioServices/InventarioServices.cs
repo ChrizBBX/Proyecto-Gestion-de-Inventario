@@ -14,11 +14,21 @@ namespace ProyectoGestionInventario.BusinessLogic.Services.InventarioServices
     {
         private readonly ProductosRepository _productosRepository;
         private readonly LotesRepository _lotesRepository;
+        private readonly SucursalesRepository _sucursalesRepository;
+        private readonly SalidasRepository _salidasRepository;
+        private readonly SalidasDetallesRepository _salidasDetallesRepository;
 
-        public InventarioServices(ProductosRepository productosRepository, LotesRepository lotesRepository)
+        public InventarioServices(ProductosRepository productosRepository, 
+            LotesRepository lotesRepository, 
+            SucursalesRepository sucursalesRepository, 
+            SalidasRepository salidasRepository, 
+            SalidasDetallesRepository salidasDetallesRepository)
         {
             _productosRepository = productosRepository;
             _lotesRepository = lotesRepository;
+            _sucursalesRepository = sucursalesRepository;
+            _salidasRepository = salidasRepository;
+            _salidasDetallesRepository = salidasDetallesRepository;
         }
 
         #region Productos
@@ -86,6 +96,68 @@ namespace ProyectoGestionInventario.BusinessLogic.Services.InventarioServices
             try
             {
                 var map = _lotesRepository.List();
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult Lotes_ListarPorProducto(int Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _lotesRepository.List_PorProducto(Id);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        #endregion
+
+        #region Sucursales
+        public ServiceResult Sucursales_Listar()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _sucursalesRepository.List();
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        #endregion
+
+        #region Salidas
+        public ServiceResult Salidas_Insertar(tbSalidas item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _salidasRepository.Insert(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+        #endregion
+
+        #region SalidasDetalle
+        public ServiceResult SalidasDetalles_Insertar(tbSalidasDetalles item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _salidasDetallesRepository.Insert(item);
                 return result.Ok(map);
             }
             catch (Exception ex)

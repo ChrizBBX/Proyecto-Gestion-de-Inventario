@@ -15,6 +15,8 @@ namespace ProyectoGestionInventario.API.Extentions
         {
             #region Inventario
             CreateMap<ProductosViewModel, tbProductos>().ReverseMap();
+            CreateMap<SalidasViewModel, tbSalidas>().ReverseMap();
+            CreateMap<SalidasDetallesViewModel, tbSalidasDetalles>().ReverseMap();
             #endregion
 
             #region Acceso

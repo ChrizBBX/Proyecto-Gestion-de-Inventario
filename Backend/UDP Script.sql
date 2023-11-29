@@ -219,10 +219,10 @@ CREATE VIEW inve.VW_tbLotes
 AS
 SELECT 
 lote_Id, lote.prod_Id,prod_Descripcion,prod_Precio, 
-lote_Cantidad, lote_FechaVencimiento, 
+lote_Cantidad,CAST(lote.lote_Cantidad * prod.prod_Precio AS DECIMAL(18,2)) AS lote_Costo, lote_FechaVencimiento, 
 lote.usua_UsuarioCreacion,creador.usua_Usuario AS usua_UsuarioCrecion_Usuario, 
 lote_FechaCreacion, lote.usua_UsuarioModificacion, modificador.usua_Usuario AS usua_UsuarioModificacion_Usuario,  
-lote_FechaModificacion, lote_Estado
+lote_FechaModificacion, lote_Estado,NULL AS Cantidad_Total,NULL AS Costo_Total
 FROM inve.tbLotes lote INNER JOIN inve.tbProductos prod
 ON lote.prod_Id = prod.prod_Id INNER JOIN acce.tbUsuarios creador
 ON lote.usua_UsuarioCreacion = creador.usua_Id LEFT JOIN acce.tbUsuarios modificador
@@ -238,5 +238,113 @@ BEGIN
 END
 
 
+GO
 
+/*Lotes SelectPorProducto*/
+CREATE OR AlTER PROCEDURE inve.UDP_tbLotes_SelectPorProducto
+@prod_Id INT
+AS
+BEGIN
+	BEGIN TRY
+		SELECT 
+			lote_Id, 
+			prod_Id, 
+			prod_Descripcion, 
+			prod_Precio, 
+			lote_Cantidad, 
+			lote_FechaVencimiento, 
+			usua_UsuarioCreacion, 
+			usua_UsuarioCrecion_Usuario, 
+			lote_FechaCreacion, 
+			usua_UsuarioModificacion, 
+			usua_UsuarioModificacion_Usuario, 
+			lote_FechaModificacion, 
+			lote_Estado,
+			lote_Costo,
+			(SELECT SUM(lote_Cantidad) FROM inve.VW_tbLotes WHERE prod_Id = @prod_Id) AS Cantidad_Total,
+			(SELECT SUM(lote_Costo) FROM inve.VW_tbLotes WHERE prod_Id = @prod_Id) AS Costo_Total
+
+		FROM 
+			inve.VW_tbLotes 
+		WHERE 
+			prod_Id = @prod_Id
+ORDER BY 
+	lote_FechaVencimiento
+	END TRY
+	BEGIN CATCH
+		SELECT 'Resultado' + ERROR_MESSAGE()
+	END CATCH
+END
+
+GO
 -------------------------------*Fin Lotes*----------------------------------
+
+-------------------------------*Sucursales*----------------------------------
+/*Sucursales View*/
+CREATE VIEW inve.VW_tbSucursales
+AS
+SELECT 
+sucu_Id, sucu_Descripcion, 
+sucu.usua_UsuarioCreacion,creador.usua_Usuario AS usua_UsuarioCreacion_Nombre, sucu_FechaCreacion, 
+sucu.usua_UsuarioModificacion,modificador.usua_Usuario AS usua_UsuarioModificacion_Nombre, sucu_FechaModificacion, 
+sucu_Estado
+FROM inve.tbSucursales sucu INNER JOIN acce.tbUsuarios creador
+ON sucu.usua_UsuarioCreacion = creador.usua_Id LEFT JOIN acce.tbUsuarios modificador
+ON sucu.usua_UsuarioModificacion = modificador.usua_Id
+
+GO
+
+/*Sucursales Select*/
+CREATE OR ALTER PROCEDURE inve.UDP_tbSucursales_Select
+AS
+BEGIN
+	SELECT * FROM inve.VW_tbSucursales WHERE sucu_Estado = 1
+END
+-------------------------------*Fin Sucursales*----------------------------------
+GO
+-------------------------------*Salidas*----------------------------------
+CREATE OR ALTER PROCEDURE inve.UDP_tbSalidas_Insert
+@usua_Id INT,
+@sucu_Id INT,
+@sucu_SalidaEstado NVARCHAR(200),
+@sali_FechaCreacion DATETIME
+AS
+BEGIN
+	BEGIN TRY
+		INSERT INTO inve.tbSalidas
+		(usua_Id, sucu_Id, sucu_SalidaEstado, usua_UsuarioCreacion, sali_FechaCreacion, usua_UsuarioModificacion, saliFechaModificacion)
+		VALUES(@usua_Id,@sucu_Id,@sucu_SalidaEstado,@usua_Id,@sali_FechaCreacion,NULL,NULL)
+		SELECT SCOPE_IDENTITY()
+	END TRY
+	BEGIN CATCH
+		SELECT 'Resultado' + ERROR_MESSAGE()
+	END CATCH
+END
+
+-------------------------------*Fin Salidas*----------------------------------
+
+GO
+-------------------------------*Salidas Detalle*----------------------------------
+CREATE OR ALTER PROCEDURE inve.UDP_tbSalidasDetetalles_Insert
+@sali_Id INT,
+@lote_Id INT,
+@sade_Cantidad INT,
+@usua_UsuarioCreacion INT,
+@sade_FechaCreacion DATETIME
+AS
+BEGIN
+	BEGIN TRY
+		INSERT INTO inve.tbSalidasDetalles
+		(sali_Id, lote_Id, sade_Cantidad, usua_UsuarioCreacion, sade_FechaCreacion, usua_UsuarioModificacion, sade_FechaModificacion)
+		VALUES(@sali_Id,@lote_Id,@sade_Cantidad,@usua_UsuarioCreacion,@sade_FechaCreacion,NULL,NULL)
+
+		UPDATE inve.tbLotes
+		SET lote_Cantidad = lote_Cantidad - @sade_Cantidad	
+		WHERE lote_Id = @lote_Id
+	SELECT 1
+	END TRY
+	BEGIN CATCH
+		SELECT 'Resultado: ' + ERROR_MESSAGE()
+	END CATCH
+END
+-------------------------------*Fin Salidas Detalle*----------------------------------

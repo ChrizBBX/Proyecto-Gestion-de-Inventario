@@ -14,6 +14,8 @@ public partial class ProyectoGestionInventario_BDContext : DbContext
 
     public virtual DbSet<VW_tbRolesPorPantalla> VW_tbRolesPorPantalla { get; set; }
 
+    public virtual DbSet<VW_tbSucursales> VW_tbSucursales { get; set; }
+
     public virtual DbSet<tbLotes> tbLotes { get; set; }
 
     public virtual DbSet<tbPantallas> tbPantallas { get; set; }
@@ -40,6 +42,7 @@ public partial class ProyectoGestionInventario_BDContext : DbContext
                 .HasNoKey()
                 .ToView("VW_tbLotes", "inve");
 
+            entity.Property(e => e.lote_Costo).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.lote_FechaCreacion).HasColumnType("datetime");
             entity.Property(e => e.lote_FechaModificacion).HasColumnType("datetime");
             entity.Property(e => e.lote_FechaVencimiento).HasColumnType("datetime");
@@ -50,9 +53,7 @@ public partial class ProyectoGestionInventario_BDContext : DbContext
             entity.Property(e => e.usua_UsuarioCrecion_Usuario)
                 .IsRequired()
                 .HasMaxLength(500);
-            entity.Property(e => e.usua_UsuarioModificacion_Usuario)
-                .IsRequired()
-                .HasMaxLength(500);
+            entity.Property(e => e.usua_UsuarioModificacion_Usuario).HasMaxLength(500);
         });
 
         modelBuilder.Entity<VW_tbRolesPorPantalla>(entity =>
@@ -73,6 +74,23 @@ public partial class ProyectoGestionInventario_BDContext : DbContext
                 .HasMaxLength(500);
             entity.Property(e => e.ropa_FechaCreacion).HasColumnType("datetime");
             entity.Property(e => e.ropa_FechaModificacion).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<VW_tbSucursales>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("VW_tbSucursales", "inve");
+
+            entity.Property(e => e.sucu_Descripcion)
+                .IsRequired()
+                .HasMaxLength(500);
+            entity.Property(e => e.sucu_FechaCreacion).HasColumnType("datetime");
+            entity.Property(e => e.sucu_FechaModificacion).HasColumnType("datetime");
+            entity.Property(e => e.usua_UsuarioCreacion_Nombre)
+                .IsRequired()
+                .HasMaxLength(500);
+            entity.Property(e => e.usua_UsuarioModificacion_Nombre).HasMaxLength(500);
         });
 
         modelBuilder.Entity<tbLotes>(entity =>

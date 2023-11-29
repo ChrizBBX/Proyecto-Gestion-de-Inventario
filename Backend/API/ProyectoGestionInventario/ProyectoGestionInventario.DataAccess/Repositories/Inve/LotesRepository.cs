@@ -27,6 +27,14 @@ namespace ProyectoGestionInventario.DataAccess.Repositories.Inve
             throw new NotImplementedException();
         }
 
+        public IEnumerable<VW_tbLotes> List_PorProducto(int Id)
+        {
+            using var db = new SqlConnection(ProyectoGestionInventario.ConnectionString);
+            var parametros = new DynamicParameters();
+            parametros.Add("@prod_Id", Id, DbType.String, ParameterDirection.Input);
+            return db.Query<VW_tbLotes>(ScriptsDataBase.UDP_tbLotes_SelectPorProducto, parametros, commandType: CommandType.StoredProcedure);
+        }
+
         public IEnumerable<VW_tbLotes> List()
         {
             using var db = new SqlConnection(ProyectoGestionInventario.ConnectionString);

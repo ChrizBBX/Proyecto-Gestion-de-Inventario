@@ -1,5 +1,5 @@
 
-var user_data = '';
+let user_data = '';
 
 export function getUserData() {
   return user_data;

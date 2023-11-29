@@ -5,3 +5,24 @@
   ('Lotes','/lotes','lotes','<Inventory2 />','<Lotes />',NULL,NULL,NULL,1,GETDATE(),NULL,NULL),
  ('Productos','/productos','productos','<Category />','<Productos />',NULL,NULL,NULL,1,GETDATE(),NULL,NULL),
  ('Salidas','/salidas','salidas',NULl,'<Salidas />',NULL,NULL,NULL,1,GETDATE(),NULL,NULL)
+
+ /*Insert de Lotes*/
+ INSERT INTO inve.tbLotes
+ (prod_Id, lote_Cantidad, lote_FechaVencimiento, usua_UsuarioCreacion, lote_FechaCreacion, usua_UsuarioModificacion, lote_FechaModificacion)
+ VALUES
+  (3,200,'12-12-2023',1,GETDATE(),NULL,NULL),
+ (24,50,'01-11-2024',1,GETDATE(),NULL,NULL)
+
+ /*Insert de Productos*/
+ INSERT INTO inve.tbProductos
+ (prod_Descripcion, prod_Precio, usua_UsuarioCreacion, prod_FechaCreacion, usua_UsuarioModificacion, prod_FechaModificacion)
+ VALUES
+ ('Smart Watch',200,1,GETDATE(),NULL,NULL)
+
+ /*Insert de Sucursales*/
+ INSERT INTO inve.tbSucursales
+ (sucu_Descripcion, usua_UsuarioCreacion, sucu_FechaCreacion, usua_UsuarioModificacion, sucu_FechaModificacion)
+ VALUES
+ ('Sucursal San Pedro Sula',1,GETDATE(),NULL,NULL),
+ ('Sucursal Tegucigalpa',1,GETDATE(),NULL,NULL),
+  ('Sucursal La Ceiba',1,GETDATE(),NULL,NULL)

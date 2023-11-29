@@ -26,5 +26,13 @@ namespace API_ProyectoGestionInventario.Controllers.ControllersInventario
             //var datos = _mapper.Map<IEnumerable<LotesViewModel>>(data.Data);
             return Ok(data);
         }
+
+        [HttpGet("ListarPorProducto")]
+        public IActionResult Listar_PorProducto(int Id)
+        {
+            var data = _inventarioServices.Lotes_ListarPorProducto(Id);
+            //var datos = _mapper.Map<IEnumerable<LotesViewModel>>(data.Data);
+            return Ok(data);
+        }
     }
 }

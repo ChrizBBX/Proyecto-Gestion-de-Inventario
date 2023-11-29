@@ -30,6 +30,9 @@ namespace ProyectoGestionInventario.BussinessLogic
             //Productos
             services.AddScoped<ProductosRepository>();
             services.AddScoped<LotesRepository>();
+            services.AddScoped<SucursalesRepository>();
+            services.AddScoped<SalidasRepository>();
+            services.AddScoped<SalidasDetallesRepository>();
             #endregion
         }
 

@@ -19,10 +19,14 @@ namespace ProyectoGestionInventario.DataAccess
         public static string UDP_tbProductos_Insert = "inve.UDP_tbProductos_Insert";
         public static string UDP_tbProductos_Update = "inve.UDP_tbProductos_Update";
         public static string UDP_tbProductos_Delete = "inve.UDP_tbProductos_Delete";
+        public static string UDP_tbSucursales_Select = "inve.UDP_tbSucursales_Select";
+        public static string UDP_tbSalidas_Insert = "inve.UDP_tbSalidas_Insert";
+        public static string UDP_tbSalidasDetalles_Insert = "inve.UDP_tbSalidasDetetalles_Insert";
         #endregion
 
         #region Lotes
         public static string UDP_tbLotes_Select = "inve.UDP_tbLotes_Select";
+        public static string UDP_tbLotes_SelectPorProducto = "inve.UDP_tbLotes_SelectPorProducto";
         #endregion
     }
 }
