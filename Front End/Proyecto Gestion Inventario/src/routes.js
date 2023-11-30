@@ -148,7 +148,7 @@ var routes = [
     component: <RTL />,
     noCollapse: true,
   },
-  { type: "title", title: "Account Pages", key: "account-pages" },
+  // { type: "title", title: "Account Pages", key: "account-pages" },
   {
     type: "",
     name: "Profile",

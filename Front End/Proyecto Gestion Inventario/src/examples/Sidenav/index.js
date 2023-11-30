@@ -92,22 +92,22 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         const getpantallas = await loginservice.getPantallas(1)
         console.log('peticion de pantallas', getpantallas)
 
-        const pantallasIds = getpantallas.map((pantalla) => pantalla.pant_Identificador);
+        // const pantallasIds = getpantallas.map((pantalla) => pantalla.pant_Identificador);
 
-        const nuevasRutas = routes.filter((ruta) => {
+        // const nuevasRutas = routes.filter((ruta) => {
 
-          return ruta.key && pantallasIds.includes(ruta.key);
-        });
+        //   return ruta.key && pantallasIds.includes(ruta.key);
+        // });
 
-        routes.forEach(ruta => {
-          if(ruta.key == "dashboard" || ruta.key == "sign-in"){
-            nuevasRutas.unshift(ruta)
-            console.log('entro al push')
-          }
-        });
-        setRutas(nuevasRutas)
+        // routes.forEach(ruta => {
+        //   if(ruta.key == "dashboard" || ruta.key == "sign-in"){
+        //     nuevasRutas.unshift(ruta)
+        //     console.log('entro al push')
+        //   }
+        // });
+        // setRutas(nuevasRutas)
 
-        console.log('Nuevas rutas:', nuevasRutas);
+        // console.log('Nuevas rutas:', nuevasRutas);
       }
     }
     fetchData()
@@ -218,22 +218,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       </SoftBox>
       <Divider />
       <List>{renderRoutes}</List>
-      <SoftBox pt={2} my={2} mx={2} mt="auto">
-        <SidenavCard />
-        <SoftBox mt={2}>
-          <SoftButton
-            component="a"
-            href="https://creative-tim.com/product/soft-ui-dashboard-pro-react"
-            target="_blank"
-            rel="noreferrer"
-            variant="gradient"
-            color={color}
-            fullWidth
-          >
-            upgrade to pro
-          </SoftButton>
-        </SoftBox>
-      </SoftBox>
     </SidenavRoot>
   );
 }
