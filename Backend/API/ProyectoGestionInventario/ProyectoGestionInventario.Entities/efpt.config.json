@@ -60,6 +60,10 @@
          "ObjectType": 3
       },
       {
+         "Name": "[inve].[VW_tbSalidas]",
+         "ObjectType": 3
+      },
+      {
          "Name": "[inve].[VW_tbSucursales]",
          "ObjectType": 3
       }

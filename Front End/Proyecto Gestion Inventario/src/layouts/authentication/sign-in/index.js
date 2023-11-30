@@ -84,7 +84,7 @@ function SignIn() {
           if (response?.usua_Id > 0) {
             Navegate('/dashboard')
             ToastSuccessPersonalizado(`Exito. Bienvenido ${response.usua_Usuario}.`)
-            localStorage.setItem('user_data', response);
+            localStorage.setItem('user_data', JSON.stringify(response));
             setUserData(response)
           } else {
             ToastWarningPersonalizado('Advertencia. Usuario o Contraseña incorrecto.')

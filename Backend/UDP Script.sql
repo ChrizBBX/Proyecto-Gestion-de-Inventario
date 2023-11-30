@@ -1,7 +1,7 @@
 -------------------------------*Usuarios*----------------------------------
 
 /*INSERT Usuarios*/
-CREATE OR ALTER PROCEDURE acce.UDP_tbUsuarios_Insert 
+CREATE OR ALTER PROCEDURE acce.UDP_tbUsuarios_Insert
 (
 @usua_Usuario NVARCHAR(500),
 @usua_Contrasenia NVARCHAR(MAX),
@@ -234,7 +234,7 @@ GO
 CREATE OR ALTER PROCEDURE inve.UDP_tbLotes_Select
 AS
 BEGIN
-	SELECT  * FROM inve.VW_tbLotes WHERE lote_Estado = 1
+	SELECT  * FROM inve.VW_tbLotes WHERE lote_Estado = 1 AND lote_Cantidad > 0
 END
 
 
@@ -267,7 +267,7 @@ BEGIN
 		FROM 
 			inve.VW_tbLotes 
 		WHERE 
-			prod_Id = @prod_Id
+			prod_Id = @prod_Id AND lote_Cantidad > 0
 ORDER BY 
 	lote_FechaVencimiento
 	END TRY
@@ -303,6 +303,7 @@ END
 -------------------------------*Fin Sucursales*----------------------------------
 GO
 -------------------------------*Salidas*----------------------------------
+/*Salidas Insert*/
 CREATE OR ALTER PROCEDURE inve.UDP_tbSalidas_Insert
 @usua_Id INT,
 @sucu_Id INT,
@@ -318,6 +319,29 @@ BEGIN
 	END TRY
 	BEGIN CATCH
 		SELECT 'Resultado' + ERROR_MESSAGE()
+	END CATCH
+END
+
+GO
+
+/*Salidas Update*/
+CREATE OR ALTER PROCEDURE inve.UDP_tbSalidas_Update
+@sali_Id INT,
+@usua_UsuarioModificacion INT,
+@sali_FechaModificacion DATETIME
+AS
+BEGIN
+	BEGIN TRY
+		UPDATE inve.tbSalidas
+			SET sucu_SalidaEstado = 'Recibido',
+				usua_UsuarioModificacion = @usua_UsuarioModificacion,
+				saliFechaModificacion = @sali_FechaModificacion
+		WHERE sali_Id = @sali_Id
+	SELECT 1
+	END TRY
+
+	BEGIN CATCH
+		SELECT 'Resultado: ' + ERROR_MESSAGE()
 	END CATCH
 END
 
@@ -339,7 +363,7 @@ BEGIN
 		VALUES(@sali_Id,@lote_Id,@sade_Cantidad,@usua_UsuarioCreacion,@sade_FechaCreacion,NULL,NULL)
 
 		UPDATE inve.tbLotes
-		SET lote_Cantidad = lote_Cantidad - @sade_Cantidad	
+		SET lote_Cantidad = lote_Cantidad - @sade_Cantidad
 		WHERE lote_Id = @lote_Id
 	SELECT 1
 	END TRY
@@ -348,3 +372,104 @@ BEGIN
 	END CATCH
 END
 -------------------------------*Fin Salidas Detalle*----------------------------------
+GO
+-------------------Salidas View------------------------------------
+CREATE VIEW inve.VW_tbSalidas
+AS
+SELECT 
+    sali.sali_Id, 
+    sali.sucu_Id,
+    sali_FechaCreacion,
+    sali.saliFechaModificacion,
+    sali.sucu_SalidaEstado,
+    sali.usua_UsuarioCreacion,
+    creador.usua_Usuario AS usua_UsuarioCreacion_Nombre,
+    sali.usua_UsuarioModificacion,
+    modificador.usua_Usuario AS usua_UsuarioModificacion_Nombre,
+    SUM(sade.sade_Cantidad) AS Unidades_Totales,
+    SUM(prod.prod_Precio * sade.sade_Cantidad) AS costo_Total
+FROM inve.tbSalidas sali 
+    INNER JOIN inve.tbSalidasDetalles sade ON sali.sali_Id = sade.sali_Id 
+    INNER JOIN inve.tbLotes lote ON sade.lote_Id = lote.lote_Id 
+    INNER JOIN inve.tbProductos prod ON lote.prod_Id = prod.prod_Id 
+    INNER JOIN acce.tbUsuarios creador ON sali.usua_UsuarioCreacion = creador.usua_Id 
+    LEFT JOIN acce.tbUsuarios modificador ON sali.usua_UsuarioModificacion = modificador.usua_Id
+GROUP BY 
+    sali.sali_Id, 
+    sali.sucu_Id,
+    sali_FechaCreacion,
+    sali.saliFechaModificacion,
+    sali.sucu_SalidaEstado,
+    sali.usua_UsuarioCreacion,
+    creador.usua_Usuario,
+    sali.usua_UsuarioModificacion,
+    modificador.usua_Usuario;
+
+
+GO
+
+/*Salidas View Select*/
+CREATE OR ALTER PROCEDURE inve.UDP_VW_tbSalidas_Select
+AS
+BEGIN
+	SELECT * FROM inve.VW_tbSalidas
+END
+
+GO
+
+/*Salidas View Filtrado*/
+CREATE OR ALTER PROCEDURE inve.UDP_VW_tbSalidas_Select_Filtered (
+    @sucu_Id INT = NULL,
+    @fechaInicio DATETIME = NULL,
+    @fechaFin DATETIME = NULL
+)
+AS
+BEGIN
+    SELECT 
+        sali.sali_Id, 
+        sali.sucu_Id,
+        sali_FechaCreacion,
+        sali.saliFechaModificacion,
+        sali.sucu_SalidaEstado,
+        sali.usua_UsuarioCreacion,
+        creador.usua_Usuario AS usua_UsuarioCreacion_Nombre,
+        sali.usua_UsuarioModificacion,
+        modificador.usua_Usuario AS usua_UsuarioModificacion_Nombre,
+        SUM(sade.sade_Cantidad) AS Unidades_Totales,
+        SUM(prod.prod_Precio * sade.sade_Cantidad) AS costo_Total
+    FROM inve.tbSalidas sali 
+        INNER JOIN inve.tbSalidasDetalles sade ON sali.sali_Id = sade.sali_Id 
+        INNER JOIN inve.tbLotes lote ON sade.lote_Id = lote.lote_Id 
+        INNER JOIN inve.tbProductos prod ON lote.prod_Id = prod.prod_Id 
+        INNER JOIN acce.tbUsuarios creador ON sali.usua_UsuarioCreacion = creador.usua_Id 
+        LEFT JOIN acce.tbUsuarios modificador ON sali.usua_UsuarioModificacion = modificador.usua_Id
+    WHERE
+        (@sucu_Id IS NULL OR sali.sucu_Id = @sucu_Id)
+        AND (@fechaInicio IS NULL OR sali.sali_FechaCreacion >= @fechaInicio)
+        AND (@fechaFin IS NULL OR sali.sali_FechaCreacion <= @fechaFin)
+    GROUP BY 
+        sali.sali_Id, 
+        sali.sucu_Id,
+        sali_FechaCreacion,
+        sali.saliFechaModificacion,
+        sali.sucu_SalidaEstado,
+        sali.usua_UsuarioCreacion,
+        creador.usua_Usuario,
+        sali.usua_UsuarioModificacion,
+        modificador.usua_Usuario;
+END;
+
+GO
+/*Verificar estado sucursal*/
+CREATE OR ALTER PROCEDURE inve.UDP_VW_tbSalidas_Select_Sucursal_Estado 2
+@sucu_Id INT
+AS
+BEGIN
+    SELECT sucu_Id, SUM(costo_Total) AS costo_Total
+    FROM inve.VW_tbSalidas 
+    WHERE sucu_SalidaEstado = 'Enviada a sucursal' AND sucu_Id = @sucu_Id
+    GROUP BY sucu_Id;
+END
+
+
+-------------------Fin Salidas View--------------------------------

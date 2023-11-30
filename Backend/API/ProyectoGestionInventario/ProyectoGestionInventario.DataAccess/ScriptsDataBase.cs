@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Update.Internal;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,11 @@ namespace ProyectoGestionInventario.DataAccess
         public static string UDP_tbProductos_Delete = "inve.UDP_tbProductos_Delete";
         public static string UDP_tbSucursales_Select = "inve.UDP_tbSucursales_Select";
         public static string UDP_tbSalidas_Insert = "inve.UDP_tbSalidas_Insert";
+        public static string UDP_tbSalidas_Update = "inve.UDP_tbSalidas_Update";
         public static string UDP_tbSalidasDetalles_Insert = "inve.UDP_tbSalidasDetetalles_Insert";
+        public static string UDP_VW_tbSalidas_Select = "inve.UDP_VW_tbSalidas_Select";
+        public static string UDP_VW_tbSalidas_Select_Filtered = "inve.UDP_VW_tbSalidas_Select_Filtered";
+        public static string UDP_VW_tbSalidas_Select_Sucursal_Estado = "inve.UDP_VW_tbSalidas_Select_Sucursal_Estado";
         #endregion
 
         #region Lotes

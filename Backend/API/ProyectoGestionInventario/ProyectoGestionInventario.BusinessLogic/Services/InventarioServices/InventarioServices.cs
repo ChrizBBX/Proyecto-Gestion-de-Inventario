@@ -17,18 +17,21 @@ namespace ProyectoGestionInventario.BusinessLogic.Services.InventarioServices
         private readonly SucursalesRepository _sucursalesRepository;
         private readonly SalidasRepository _salidasRepository;
         private readonly SalidasDetallesRepository _salidasDetallesRepository;
+        private readonly SalidasViewRepository _salidasViewRepository;
 
-        public InventarioServices(ProductosRepository productosRepository, 
-            LotesRepository lotesRepository, 
-            SucursalesRepository sucursalesRepository, 
-            SalidasRepository salidasRepository, 
-            SalidasDetallesRepository salidasDetallesRepository)
+        public InventarioServices(ProductosRepository productosRepository,
+            LotesRepository lotesRepository,
+            SucursalesRepository sucursalesRepository,
+            SalidasRepository salidasRepository,
+            SalidasDetallesRepository salidasDetallesRepository,
+            SalidasViewRepository salidasViewRepository)
         {
             _productosRepository = productosRepository;
             _lotesRepository = lotesRepository;
             _sucursalesRepository = sucursalesRepository;
             _salidasRepository = salidasRepository;
             _salidasDetallesRepository = salidasDetallesRepository;
+            _salidasViewRepository = salidasViewRepository;
         }
 
         #region Productos
@@ -149,6 +152,20 @@ namespace ProyectoGestionInventario.BusinessLogic.Services.InventarioServices
                 return result.Error(ex.Message);
             }
         }
+
+        public ServiceResult Salidas_Actualizar(tbSalidas item)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _salidasRepository.Update(item);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
         #endregion
 
         #region SalidasDetalle
@@ -165,6 +182,51 @@ namespace ProyectoGestionInventario.BusinessLogic.Services.InventarioServices
                 return result.Error(ex.Message);
             }
         }
+        #endregion
+
+        #region SalidasView
+        public ServiceResult SalidasView_Listar()
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _salidasViewRepository.List();
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult SalidasView_Listar_Filtered(int? sucu, string? inicio, string? fin)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _salidasViewRepository.List_Filtered(sucu, inicio, fin);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
+        public ServiceResult Sucursal_Status(int Id)
+        {
+            var result = new ServiceResult();
+            try
+            {
+                var map = _salidasViewRepository.Sucursal_Status(Id);
+                return result.Ok(map);
+            }
+            catch (Exception ex)
+            {
+                return result.Error(ex.Message);
+            }
+        }
+
         #endregion
     }
 }

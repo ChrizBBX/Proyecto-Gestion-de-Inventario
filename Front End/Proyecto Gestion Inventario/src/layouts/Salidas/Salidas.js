@@ -18,9 +18,9 @@ import SoftInput from "components/SoftInput"
 import SoftButton from "components/SoftButton"
 
 //Material
-import { Box, Grid, Card, CardHeader, Container, Typography, Dialog, DialogActions, DialogTitle, DialogContent, Button, TextField, FormLabel } from "@mui/material"
+import { Box, Grid, Card, CardHeader, Container, Typography, Dialog, DialogActions, DialogTitle, DialogContent, Button, TextField, FormLabel, useStepContext } from "@mui/material"
 import { CardMedia } from "@mui/material"
-import { Add, Edit, Visibility, Delete, Label, Cancel, CollectionsOutlined } from "@mui/icons-material"
+import { Add, Edit, Visibility, Delete, Label, Cancel, CollectionsOutlined, ExpandCircleDown, Send } from "@mui/icons-material"
 import styled from "styled-components"
 import { grey } from "@mui/material/colors"
 
@@ -36,7 +36,8 @@ import { ToastSuccessPersonalizado } from "assets/Toast/Toast"
 import LoginService from "layouts/authentication/LoginService/LoginService"
 
 //AntDesign
-import { Input, Select } from "antd"
+import { Input, Select, DatePicker } from "antd"
+const { RangePicker } = DatePicker;
 
 const SmallSoftButton = styled(SoftButton)`
   font-size: 12px;
@@ -57,7 +58,13 @@ function Salidas() {
     const [costo, setCosto] = useState(0)
     const [dataOriginal, setDataOriginal] = useState([])
     const [data, setData] = useState([])
-    const [cantidadRestar, setCantidadRestar] = useState(0)
+    const [canDoSalidas, setCanDoSalidas] = useState(true)
+    const [viewData, setViewData] = useState([])
+    const [date,setDate] = useState(null)
+    const [sucu,setSucu] = useState(null)
+    const [inicio,setInicio] = useState(null)
+    const [fin,setFin] = useState(null)
+    const [sucursalEstado,setSucursalEstado] = useState(true)
 
     async function set_Sucursales() {
         const response = await salidasservice.get_Sucursales()
@@ -66,6 +73,12 @@ function Salidas() {
             label: sucursal?.sucu_Descripcion
         }))
         setSucursales(mapeado)
+    }
+
+    async function set_Salidas() {
+        const response = await salidasservice.get_Salidas()
+        console.log(response)
+        setViewData(response)
     }
 
     async function set_Productos() {
@@ -125,9 +138,20 @@ function Salidas() {
     const { isValid, errors } = formState;
     const modelo = watch()
 
-    const handleOnChangeSucursal = (sucursal) => {
-        setValue('sucu_Id', sucursal)
-        trigger('sucu_Id')
+    const handleOnChangeSucursal = async (sucursal) => {
+        const response = await salidasservice.sucursal_Status(sucursal)
+             
+            if(response?.costo_Total > 5000){
+                setSucursalEstado(false)
+                ToastWarningPersonalizado('Advertencia. La Sucursal seleccionada tiene muchos pendientes')
+                setValue('sucu_Id',undefined)
+            }else{
+                setValue('sucu_Id', sucursal)
+                trigger('sucu_Id')
+                setSucursalEstado(true)
+            }
+        
+        console.log(response)
     }
 
     const handleOnChangeProducto = (producto) => {
@@ -152,9 +176,61 @@ function Salidas() {
         }
     }
 
+    const handleOnChangeDateRange = async (value) => {
+        console.log('fecha cambiada valor: ',value)
+        if (value != null) {
+
+            const fechasFormateadas = value.map((fecha) => {
+                const fechaObj = new Date(fecha);
+                const mes = fechaObj.getMonth() + 1;
+                const dia = fechaObj.getDate();
+                const año = fechaObj.getFullYear();
+
+                const mesStr = mes < 10 ? `0${mes}` : mes;
+                const diaStr = dia < 10 ? `0${dia}` : dia;
+
+                // Formatear la fecha como "mes-dia-año"
+                return `${mesStr}-${diaStr}-${año}`;
+            });
+
+            const fecha1 = fechasFormateadas[0];
+            const fecha2 = fechasFormateadas[1];
+
+            console.log('Fecha 1:', fecha1);
+            console.log('Fecha 2:', fecha2);
+            setInicio(fecha1)
+            setFin(fecha2)
+            const response = await salidasservice.filtered(fecha1,fecha2,sucu)
+            setViewData(response)
+        }else{
+            setInicio(null)
+            setFin(null)
+            const response = await salidasservice.filtered(null,null,sucu)
+            setViewData(response)
+        }
+    };
+
+    const handleOnChangeSucursalView = async (sucursal) => {
+        if(sucursal != undefined){
+            setSucu(sucursal)
+            const response = await salidasservice.filtered(inicio,fin,sucursal)
+            setViewData(response)
+        }else{
+            setSucu(null)
+            const response = await salidasservice.filtered(inicio,fin,null)
+            setViewData(response)
+        }
+        console.log('Sucursal Seleccionada',sucursal)
+    }
+
     useEffect(() => {
         set_Sucursales()
         set_Productos()
+        set_Salidas()
+        const usuario = JSON.parse(localStorage.getItem('user_data'))
+        if (usuario?.role_Id != 1) {
+            setCanDoSalidas(false)
+        }
         setTimeout(() => { console.log('lo que queres ver', sucursales) }, 500)
     }, [])
 
@@ -192,32 +268,128 @@ function Salidas() {
         }
     ]
 
-    const update = async(sali) =>{
-        if(sali > 0){
-            if (cantidadRestar > 0) {
+    const viewColumns = [
+        {
+            name: 'ID',
+            selector: row => row.sali_Id
+        },
+        {
+            name: 'Fecha',
+            selector: row => row.sali_FechaCreacion
+        },
+        {
+            name: 'Unidades Totales',
+            selector: row => row.unidades_Totales
+        },
+        {
+            name: 'Costo Total',
+            selector: row => row.costo_Total
+        },
+        {
+            name: 'Estado',
+            selector: row => row.sucu_SalidaEstado
+        },
+        {
+            name: 'Usuario Creacion',
+            selector: row => row.usua_UsuarioCreacion_Nombre
+        },
+        {
+            name: 'Usuario Aceptacion',
+            selector: row => row.usua_UsuarioModificacion_Nombre
+        },
+        {
+            name: 'Fecha Recibida',
+            selector: row => row.saliFechaModificacion
+        },
+        {
+            name: 'Accion',
+            cell: (row) => (
+                <>
+                    {row.sucu_SalidaEstado == "Enviada a sucursal" ?
+                        <Box>
+                            <SmallSoftButton
+                                variant={'gradient'}
+                                color={'primary'}
+                                onClick={() => { Actualizar_Salida(row.sali_Id) }}
+                            >
+                                <ExpandCircleDown />
+                            </SmallSoftButton>
+                        </Box>
+                        :
+                        <>
+                            <SmallSoftButton
+                                variant={'gradient'}
+                                color={'primary'}
+                                disabled={true}
+                            >
+                                <Send />
+                            </SmallSoftButton>
+                        </>
+                    }
+                </>
+            )
+        },
+    ]
+
+    const update = async (sali) => {
+        let quitar = modelo.sade_Cantidad
+        if (sali > 0) {
+            if (quitar > 0) {
                 data.forEach(item => {
-                if (cantidadRestar > item) {
-                    console.log('Se le resta a un lote y continua')
-                    salidasservice.insert_SalidasDetalles(sali, item.lote_Id, cantidadRestar)
-                    setCantidadRestar(cantidadRestar - item.lote_Cantidad)
-                } else {
-                    console.log('Se le resta a un lote y para')
-                    salidasservice.insert_SalidasDetalles(sali, item.lote_Id, cantidadRestar)
-                    setCantidadRestar(0)
-                }
+                    if (quitar > 0) {
+                        if (quitar > item.lote_Cantidad) {
+                            console.log(`cantidad a restar: `, quitar)
+                            salidasservice.insert_SalidasDetalles(sali, item.lote_Id, item.lote_Cantidad)
+                            quitar = quitar - item.lote_Cantidad
+                        } else {
+                            console.log(`cantidad a restar: `, quitar)
+                            salidasservice.insert_SalidasDetalles(sali, item.lote_Id, quitar)
+                            quitar = 0
+                        }
+                    }
                 });
             }
-    }
+            //Limpieza
+            reset()
+            setAdding(false)
+            setStandard(true)
+            setStock(0)
+            setCosto(0)
+            setData([[]])
+            setDataOriginal([[]])
+            ToastSuccessPersonalizado('Exito. La salida se ha registrado exitosamente')
+        }
     }
 
     async function Finalizar_Salida() {
-        setCantidadRestar(modelo.sade_Cantidad)
-       try{
-        const response = await salidasservice.insert_Salidas(modelo)
-        setTimeout(()=>{update(response)},1000)
-       }catch(error){
-        console.log(error)
-       }
+        try {
+            const response = await salidasservice.insert_Salidas(modelo)
+            setTimeout(() => { update(response) }, 1000)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async function Actualizar_Salida(Id) {
+        try {
+            const response = await salidasservice.update_Salidas(Id)
+            if (response == 1) {
+                set_Salidas()
+                ToastSuccess('Exito. Estado de salida actualizado')
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    function cerrarVista(){
+        setStandard(true),
+        setView(false)
+        setInicio(null)
+        setFin(null)
+        setSucu(null)
+        set_Salidas()
+        console.log('cerro vista')
     }
 
     return (
@@ -229,13 +401,13 @@ function Salidas() {
 
                     <Grid container pt={3} pb={1}>
 
-                        <Grid item xs={2}>
+                        <Grid item xs={2} style={{ display: canDoSalidas ? '' : 'none' }}>
                             <SmallSoftButton onClick={() => { setAdding(true), setStandard(false) }} variant={'gradient'} color={'info'}><Add />Realizar una salida</SmallSoftButton>
                         </Grid>
 
 
                         <Grid item xs={2}>
-                            <SmallSoftButton onClick={() => { }} variant={'gradient'} color={'primary'}><Visibility style={{ marginRight: 8 }} />Ver Salidas</SmallSoftButton>
+                            <SmallSoftButton onClick={() => { setStandard(false), setView(true) }} variant={'gradient'} color={'primary'}><Visibility style={{ marginRight: 8 }} />Ver Salidas</SmallSoftButton>
                         </Grid>
 
                     </Grid>
@@ -282,7 +454,7 @@ function Salidas() {
                             </SmallSoftButton>
                         </Grid>
                         <Grid item>
-                            <SmallSoftButton onClick={() => { trigger(), set_Data() }} variant={'contained'} color={'info'}>
+                            <SmallSoftButton style={{'display': sucursalEstado == true ? '' : 'none' }} onClick={() => { trigger(), set_Data() }} variant={'contained'} color={'info'}>
                                 <Add style={{ marginRight: 8 }} />
                                 Agregar
                             </SmallSoftButton>
@@ -291,7 +463,7 @@ function Salidas() {
 
                     {data.length > 0 ? <Container style={{ paddingBottom: 6, }}>
                         <Typography variant="h3" pb={3}>Lotes disponibles</Typography>
-                        <DataTable columns={columns} data={data}></DataTable>
+                        <DataTable columns={columns} data={data} pagination={true}></DataTable>
                         <Grid container justifyContent="center" pt={6} pb={2}>
                             <Grid item>
                                 <SmallSoftButton onClick={Finalizar_Salida} variant={'gradient'} color={'info'}>Finalizar Salida</SmallSoftButton>
@@ -299,6 +471,36 @@ function Salidas() {
                         </Grid>
                     </Container> : ''}
 
+                </Container>
+
+                <Container style={{ display: view ? 'block' : 'none' }}>
+                    <Typography variant="h3" pt={3} pb={3}>Listado de Salidas</Typography>
+                    <Grid container>
+
+                        <Grid item xs={6} mb={5}>
+                            <Typography variant="h6">Filtrar por rango de Fechas</Typography>
+                            <RangePicker showTime onChange={handleOnChangeDateRange} />
+                        </Grid>
+
+                        <Grid item xs={6}>
+                            <Typography variant="h6">Sucursal</Typography>
+                            <Select placeholder="Filtrar por sucursal..." style={{ width: '95%' }} size="large" options={sucursales} onChange={handleOnChangeSucursalView} allowClear={true}/>
+                        </Grid>
+
+                    </Grid>
+                    <Container style={{ paddingBottom: 6, }}>
+                        <DataTable columns={viewColumns} data={viewData} pagination={true}></DataTable>
+                    </Container>
+
+                    <Grid container justifyContent="flex-end" spacing={2} pt={3} pb={1}>
+                        <Grid item>
+                            <SmallSoftButton onClick={cerrarVista} variant={'contained'} color={'error'}>
+                                <Cancel style={{ marginRight: 8 }} />
+                                Cancelar
+                            </SmallSoftButton>
+                        </Grid>
+
+                    </Grid>
                 </Container>
 
             </Card>

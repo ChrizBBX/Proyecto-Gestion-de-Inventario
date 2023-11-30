@@ -43,7 +43,15 @@ namespace ProyectoGestionInventario.DataAccess.Repositories.Inve
 
         public RequestStatus Update(tbSalidas item)
         {
-            throw new NotImplementedException();
+            using var db = new SqlConnection(ProyectoGestionInventario.ConnectionString);
+            RequestStatus result = new RequestStatus();
+            var parametros = new DynamicParameters();
+            parametros.Add("@sali_Id", item.sali_Id, DbType.String, ParameterDirection.Input);
+            parametros.Add("@usua_UsuarioModificacion", item.usua_UsuarioModificacion, DbType.String, ParameterDirection.Input);
+            parametros.Add("@sali_FechaModificacion", item.saliFechaModificacion, DbType.DateTime, ParameterDirection.Input);
+            var resultado = db.QueryFirst<string>(ScriptsDataBase.UDP_tbSalidas_Update, parametros, commandType: CommandType.StoredProcedure);
+            result.MessageStatus = resultado;
+            return result;
         }
     }
 }

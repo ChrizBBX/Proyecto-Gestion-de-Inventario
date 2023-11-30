@@ -14,6 +14,8 @@ public partial class ProyectoGestionInventario_BDContext : DbContext
 
     public virtual DbSet<VW_tbRolesPorPantalla> VW_tbRolesPorPantalla { get; set; }
 
+    public virtual DbSet<VW_tbSalidas> VW_tbSalidas { get; set; }
+
     public virtual DbSet<VW_tbSucursales> VW_tbSucursales { get; set; }
 
     public virtual DbSet<tbLotes> tbLotes { get; set; }
@@ -74,6 +76,22 @@ public partial class ProyectoGestionInventario_BDContext : DbContext
                 .HasMaxLength(500);
             entity.Property(e => e.ropa_FechaCreacion).HasColumnType("datetime");
             entity.Property(e => e.ropa_FechaModificacion).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<VW_tbSalidas>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("VW_tbSalidas", "inve");
+
+            entity.Property(e => e.costo_Total).HasColumnType("decimal(29, 2)");
+            entity.Property(e => e.saliFechaModificacion).HasColumnType("datetime");
+            entity.Property(e => e.sali_FechaCreacion).HasColumnType("datetime");
+            entity.Property(e => e.sucu_SalidaEstado).HasMaxLength(200);
+            entity.Property(e => e.usua_UsuarioCreacion_Nombre)
+                .IsRequired()
+                .HasMaxLength(500);
+            entity.Property(e => e.usua_UsuarioModificacion_Nombre).HasMaxLength(500);
         });
 
         modelBuilder.Entity<VW_tbSucursales>(entity =>
