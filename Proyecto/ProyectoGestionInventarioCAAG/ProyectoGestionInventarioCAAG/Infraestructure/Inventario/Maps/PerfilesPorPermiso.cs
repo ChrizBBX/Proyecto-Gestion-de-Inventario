@@ -1,12 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using ProyectoGestionInventarioCAAG.Infraestructure.Inventario.Entities;
 
 namespace ProyectoGestionInventarioCAAG.Infraestructure.Inventario.Maps
 {
-    public class PerfilesPorPermiso : IEntityTypeConfiguration<PerfilesPorPermiso>
+    public class PerfilesPorPermisoMap : IEntityTypeConfiguration<PerfilesPorPermiso>
     {
         public void Configure(EntityTypeBuilder<PerfilesPorPermiso> builder)
         {
+            builder.ToTable("PerfilesPorPermiso");
             builder.HasKey(e => e.PerfilPorPermisoId).HasName("PK_PerfilesPorPermisos_perfilPorPermisoId");
 
             builder.Property(e => e.PerfilPorPermisoId)

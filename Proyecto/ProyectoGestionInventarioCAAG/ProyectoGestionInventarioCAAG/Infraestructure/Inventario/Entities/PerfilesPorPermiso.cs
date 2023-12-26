@@ -3,11 +3,13 @@ using System.Collections.Generic;
 
 namespace ProyectoGestionInventarioCAAG.Infraestructure.Inventario.Entities;
 
-public partial class Perfile
+public partial class PerfilesPorPermiso
 {
+    public int PerfilPorPermisoId { get; set; }
+
     public int PerfilId { get; set; }
 
-    public string PerfilNombre { get; set; } = null!;
+    public int PermisoId { get; set; }
 
     public int UsuarioCreacion { get; set; }
 
@@ -19,11 +21,11 @@ public partial class Perfile
 
     public bool? Activo { get; set; }
 
-    public virtual ICollection<PefilesPorPermiso> PefilesPorPermisos { get; set; } = new List<PefilesPorPermiso>();
+    public virtual Perfil Perfil { get; set; } = null!;
+
+    public virtual Permiso Permiso { get; set; } = null!;
 
     public virtual Usuario UsuarioCreacionNavigation { get; set; } = null!;
 
     public virtual Usuario? UsuarioModificacionNavigation { get; set; }
-
-    public virtual ICollection<Usuario> Usuarios { get; set; } = new List<Usuario>();
 }

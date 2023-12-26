@@ -43,15 +43,15 @@ public partial class Usuario
 
     public virtual ICollection<Lote> LoteUsuarioModificacionNavigations { get; set; } = new List<Lote>();
 
-    public virtual ICollection<PefilesPorPermiso> PefilesPorPermisoUsuarioCreacionNavigations { get; set; } = new List<PefilesPorPermiso>();
+    public virtual ICollection<PerfilesPorPermiso> PefilesPorPermisoUsuarioCreacionNavigations { get; set; } = new List<PerfilesPorPermiso>();
 
-    public virtual ICollection<PefilesPorPermiso> PefilesPorPermisoUsuarioModificacionNavigations { get; set; } = new List<PefilesPorPermiso>();
+    public virtual ICollection<PerfilesPorPermiso> PefilesPorPermisoUsuarioModificacionNavigations { get; set; } = new List<PerfilesPorPermiso>();
 
-    public virtual Perfile Perfil { get; set; } = null!;
+    public virtual Perfil Perfil { get; set; } = null!;
 
-    public virtual ICollection<Perfile> PerfileUsuarioCreacionNavigations { get; set; } = new List<Perfile>();
+    public virtual ICollection<Perfil> PerfileUsuarioCreacionNavigations { get; set; } = new List<Perfil>();
 
-    public virtual ICollection<Perfile> PerfileUsuarioModificacionNavigations { get; set; } = new List<Perfile>();
+    public virtual ICollection<Perfil> PerfileUsuarioModificacionNavigations { get; set; } = new List<Perfil>();
 
     public virtual ICollection<Permiso> PermisoUsuarioCreacionNavigations { get; set; } = new List<Permiso>();
 

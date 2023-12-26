@@ -19,7 +19,7 @@ public partial class Permiso
 
     public bool? Activo { get; set; }
 
-    public virtual ICollection<PefilesPorPermiso> PefilesPorPermisos { get; set; } = new List<PefilesPorPermiso>();
+    public virtual ICollection<PerfilesPorPermiso> PefilesPorPermisos { get; set; } = new List<PerfilesPorPermiso>();
 
     public virtual Usuario UsuarioCreacionNavigation { get; set; } = null!;
 
