@@ -1,7 +1,7 @@
-CREATE DATABASE ProyectoGestionInventario_BD
+CREATE DATABASE ProyectoGestionInventarioCAAG
 
 GO
-USE ProyectoGestionInventario_BD
+USE ProyectoGestionInventarioCAAG
 GO
 
 CREATE SCHEMA acce
