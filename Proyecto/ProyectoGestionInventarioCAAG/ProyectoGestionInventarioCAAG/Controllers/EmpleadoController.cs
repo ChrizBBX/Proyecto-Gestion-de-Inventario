@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProyectoGestionInventarioCAAG._Features.Empleados;
+using ProyectoGestionInventarioCAAG._Features.Empleados.Dtos;
 
 namespace ProyectoGestionInventarioCAAG.Controllers
 {
@@ -22,6 +23,13 @@ namespace ProyectoGestionInventarioCAAG.Controllers
         public IActionResult ObtenerEmpleados() 
         {
             var result = _empleadoService.ObtenerEmpleados();
+            return Ok(result);
+        }
+
+        [HttpPost("AgregarEmpleados")]
+        public IActionResult AgregarEmpleados(EmpleadoDto empleado)
+        {
+            var result = _empleadoService.AgregarEmpleados(empleado);
             return Ok(result);
         }
     }

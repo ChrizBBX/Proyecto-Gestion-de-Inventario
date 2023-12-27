@@ -8,6 +8,8 @@
 
         public string? EmpleadoApellido { get; set; }
 
+        public string? EmpleadoIdentidad { get; set; }
+
         public DateTime? EmpleadoFechaNacimiento { get; set; }
 
         public string? EmpleadoSexo { get; set; }

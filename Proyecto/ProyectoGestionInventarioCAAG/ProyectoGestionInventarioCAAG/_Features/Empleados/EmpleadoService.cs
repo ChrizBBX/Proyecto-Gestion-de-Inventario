@@ -4,6 +4,7 @@ using Farsiman.Domain.Core.Standard.Repositories;
 using FluentValidation;
 using FluentValidation.Results;
 using ProyectoGestionInventarioCAAG._Features.Empleados.Dtos;
+using ProyectoGestionInventarioCAAG.Infraestructure.Inventario;
 using ProyectoGestionInventarioCAAG.Infraestructure.Inventario.Entities;
 using ProyectoGestionInventarioCAAG.Utility;
 using static ProyectoGestionInventarioCAAG.Infraestructure.Inventario.Entities.Empleado;
@@ -15,10 +16,10 @@ namespace ProyectoGestionInventarioCAAG._Features.Empleados
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
 
-        public EmpleadoService(IMapper mapper, IUnitOfWork unitOfWork)
+        public EmpleadoService(IMapper mapper, UnitOfWorkBuilder unitOfWork)
         {
             _mapper = mapper;
-            _unitOfWork = unitOfWork;
+            _unitOfWork = unitOfWork.BuilderProyectoGestionInventarioCAAG();
         }
 
         public Respuesta<List<EmpleadoDto>> ObtenerEmpleados()
@@ -59,7 +60,19 @@ namespace ProyectoGestionInventarioCAAG._Features.Empleados
                 return Respuesta.Fault<string>(menssageValidation, OutputMessage.FaultInsertEmpleado);
             }
 
+            var VerificarEmpleadoExiste = _unitOfWork.Repository<Empleado>().AsQueryable().Where(x => x.EmpleadoIdentidad == objeto.EmpleadoIdentidad).FirstOrDefault();
+            if (VerificarEmpleadoExiste != null) { return Respuesta<string>.Fault(OutputMessage.FaultEmpleadoExists); }
 
+            var VerififcarUsuarioCreador = _unitOfWork.Repository<Usuario>().AsQueryable().Where(x => x.UsuarioCreacion == objeto.UsuarioCreacion).ToList();
+            if (VerififcarUsuarioCreador.Count == 0) { return Respuesta<string>.Fault(OutputMessage.FaultUserCreationNotExists); }
+
+            objeto.FechaCreacion = DateTime.Now;
+            objeto.FechaModificacion = null;
+            objeto.UsuarioModificacion = null;
+
+            _unitOfWork.Repository<Empleado>().Add(objeto);
+            _unitOfWork.SaveChanges();
+            return Respuesta<string>.Success(OutputMessage.SuccessInsertEmpleado);
         }
     }
 }

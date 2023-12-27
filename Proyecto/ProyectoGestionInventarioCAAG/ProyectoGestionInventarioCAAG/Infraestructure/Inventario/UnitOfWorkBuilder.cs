@@ -13,7 +13,7 @@ namespace ProyectoGestionInventarioCAAG.Infraestructure.Inventario
             _serviceProvider = serviceProvider;
         }
 
-        public IUnitOfWork BuilderTransporteCaag()
+        public IUnitOfWork BuilderProyectoGestionInventarioCAAG()
         {
             DbContext dbContext = _serviceProvider.GetService<ProyectoGestionInventarioCaagContext>() ?? throw new NullReferenceException();
             return new UnitOfWork(dbContext);

@@ -9,7 +9,6 @@ namespace ProyectoGestionInventarioCAAG.Infraestructure.Inventario
         public MapProfile()
         {
             CreateMap<EmpleadoDto, Empleado>().ReverseMap();
-
         }
     }
 }

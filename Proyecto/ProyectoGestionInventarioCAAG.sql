@@ -38,23 +38,25 @@ CREATE TABLE Empleados
 empleadoId INT IDENTITY(1,1),
 empleadoNombre VARCHAR(200),
 empleadoApellido VARCHAR(200),
+empleadoIdentidad VARCHAR(13),
 empleadoFechaNacimiento DATE,
 empleadoSexo VARCHAR,
 empleadoTelefono VARCHAR(14),
 
 usuarioCreacion INT NOT NULL,
-FechaCreacion DATETIME NOT NULL,
+FechaCreacion DATETIME NOT NULL,	
 usuarioModificacion INT,
 FechaModificacion DATETIME,
 Activo BIT DEFAULT 1
 
 CONSTRAINT PK_Empleados_empleadoId PRIMARY KEY (empleadoId),
+CONSTRAINT UQ_Empleados_empleadoIdentidad UNIQUE (empleadoIdentidad),
 CONSTRAINT CK_Empleados_empleadoSexo CHECK(empleadoSexo IN('M', 'F')),
 CONSTRAINT FK_Empleados_usuarioCreacion FOREIGN KEY (usuarioCreacion) REFERENCES Usuarios (usuarioId),
 CONSTRAINT FK_Empleados_usuarioModificacion FOREIGN KEY (usuarioModificacion) REFERENCES Usuarios (usuarioId)
 )
 
-INSERT INTO Empleados VALUES('Christopher','Aguilar','10-03-2004','M','99122654',1,GETDATE(),NULL,NULL,1)
+INSERT INTO Empleados VALUES('Christopher','Aguilar','0501200414817','10-03-2004','M','99122654',1,GETDATE(),NULL,NULL,1)
 
 ALTER TABLE Usuarios
 ADD CONSTRAINT FK_Usuarios_empleadoId_Empleados_empleadoId FOREIGN KEY (empleadoId) REFERENCES Empleados (empleadoId)

@@ -12,6 +12,8 @@ public partial class Empleado
 
     public string? EmpleadoApellido { get; set; }
 
+    public string? EmpleadoIdentidad { get; set; }
+
     public DateTime? EmpleadoFechaNacimiento { get; set; }
 
     public string? EmpleadoSexo { get; set; }
@@ -42,9 +44,11 @@ public partial class Empleado
             RuleFor(x => x.EmpleadoNombre).MaximumLength(200);
             RuleFor(x => x.EmpleadoApellido).NotEmpty();
             RuleFor(x => x.EmpleadoApellido).MaximumLength(200);
+            RuleFor(x => x.EmpleadoIdentidad).NotEmpty();
+            RuleFor(x => x.EmpleadoIdentidad).MaximumLength(13);
             RuleFor(x => x.EmpleadoFechaNacimiento).NotEmpty();
             RuleFor(x => x.EmpleadoSexo).NotEmpty();
-            RuleFor(x => x.EmpleadoSexo).InclusiveBetween("M","F");
+            RuleFor(x => x.EmpleadoSexo).Must(sexo => sexo == "M" || sexo == "F");
             RuleFor(x => x.EmpleadoTelefono).NotEmpty();
             RuleFor(x => x.EmpleadoTelefono).MaximumLength(14);
 

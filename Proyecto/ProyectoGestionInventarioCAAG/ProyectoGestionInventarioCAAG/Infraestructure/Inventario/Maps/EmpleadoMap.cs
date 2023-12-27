@@ -12,6 +12,8 @@ namespace ProyectoGestionInventarioCAAG.Infraestructure.Inventario.Maps
             builder.ToTable("Empleados");
             builder.HasKey(e => e.EmpleadoId).HasName("PK_Empleados_empleadoId");
 
+            builder.HasIndex(e => e.EmpleadoIdentidad, "UQ_Empleados_empleadoIdentidad").IsUnique();
+
             builder.Property(e => e.EmpleadoId).HasColumnName("empleadoId");
             builder.Property(e => e.Activo).HasDefaultValueSql("((1))");
             builder.Property(e => e.EmpleadoApellido)
@@ -21,6 +23,10 @@ namespace ProyectoGestionInventarioCAAG.Infraestructure.Inventario.Maps
             builder.Property(e => e.EmpleadoFechaNacimiento)
                 .HasColumnType("date")
                 .HasColumnName("empleadoFechaNacimiento");
+            builder.Property(e => e.EmpleadoIdentidad)
+                .HasMaxLength(13)
+                .IsUnicode(false)
+                .HasColumnName("empleadoIdentidad");
             builder.Property(e => e.EmpleadoNombre)
                 .HasMaxLength(200)
                 .IsUnicode(false)

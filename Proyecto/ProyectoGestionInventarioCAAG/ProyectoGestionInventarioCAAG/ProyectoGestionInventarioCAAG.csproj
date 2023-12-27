@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Utility\Scaffolding\Controllers\" />
+    <Folder Include="Utility\Scaffolding\" />
     <Folder Include="_Common\" />
   </ItemGroup>
 
