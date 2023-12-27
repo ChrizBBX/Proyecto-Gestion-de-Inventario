@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ProyectoGestionInventarioCAAG._Features.Empleados.Dtos;
 using ProyectoGestionInventarioCAAG.Infraestructure.Inventario.Entities;
 
 namespace ProyectoGestionInventarioCAAG.Infraestructure.Inventario
@@ -7,7 +8,7 @@ namespace ProyectoGestionInventarioCAAG.Infraestructure.Inventario
     {
         public MapProfile()
         {
-            //CreateMap<ColaboradorDto, Colaborador>().ReverseMap();
+            CreateMap<EmpleadoDto, Empleado>().ReverseMap();
 
         }
     }

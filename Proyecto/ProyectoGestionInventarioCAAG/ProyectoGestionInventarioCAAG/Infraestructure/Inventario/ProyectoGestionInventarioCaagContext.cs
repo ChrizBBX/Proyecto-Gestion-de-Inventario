@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using ProyectoGestionInventarioCAAG.Infraestructure.Inventario.Entities;
+using ProyectoGestionInventarioCAAG.Infraestructure.Inventario.Maps;
 
 namespace ProyectoGestionInventarioCAAG.Infraestructure.Inventario;
 
@@ -40,6 +41,17 @@ public partial class ProyectoGestionInventarioCaagContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.ApplyConfiguration(new EmpleadoMap());
+        modelBuilder.ApplyConfiguration(new EstadosSalidaMap());
+        modelBuilder.ApplyConfiguration(new LoteMap());
+        modelBuilder.ApplyConfiguration(new PerfilesPorPermisoMap());
+        modelBuilder.ApplyConfiguration(new PerfilMap());
+        modelBuilder.ApplyConfiguration(new PermisoMap());
+        modelBuilder.ApplyConfiguration(new ProductoMap());
+        modelBuilder.ApplyConfiguration(new SalidaMap());
+        modelBuilder.ApplyConfiguration(new SalidasDetalleMap());
+        modelBuilder.ApplyConfiguration(new SucursalMap());
+        modelBuilder.ApplyConfiguration(new UsuariosMap());
         OnModelCreatingPartial(modelBuilder);
     }
 

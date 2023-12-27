@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentValidation;
+using System;
 using System.Collections.Generic;
 
 namespace ProyectoGestionInventarioCAAG.Infraestructure.Inventario.Entities;
@@ -32,4 +33,21 @@ public partial class Empleado
     public virtual Usuario? UsuarioModificacionNavigation { get; set; }
 
     public virtual ICollection<Usuario> Usuarios { get; set; } = new List<Usuario>();
+
+    public class EmpleadoValidations : AbstractValidator<Empleado>
+    {
+        public EmpleadoValidations()
+        {
+            RuleFor(x => x.EmpleadoNombre).NotEmpty();
+            RuleFor(x => x.EmpleadoNombre).MaximumLength(200);
+            RuleFor(x => x.EmpleadoApellido).NotEmpty();
+            RuleFor(x => x.EmpleadoApellido).MaximumLength(200);
+            RuleFor(x => x.EmpleadoFechaNacimiento).NotEmpty();
+            RuleFor(x => x.EmpleadoSexo).NotEmpty();
+            RuleFor(x => x.EmpleadoSexo).InclusiveBetween("M","F");
+            RuleFor(x => x.EmpleadoTelefono).NotEmpty();
+            RuleFor(x => x.EmpleadoTelefono).MaximumLength(14);
+
+        }
+    }
 }

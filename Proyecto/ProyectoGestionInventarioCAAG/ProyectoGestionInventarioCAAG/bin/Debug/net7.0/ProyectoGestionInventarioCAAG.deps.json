@@ -17,7 +17,6 @@
           "Farsiman.Extensions.Configuration": "2.29723.0",
           "Farsiman.Infraestructure.Core.Entity.Standard": "8.0.60115",
           "FluentValidation": "11.9.0",
-          "Microsoft.EntityFrameworkCore": "7.0.14",
           "Microsoft.EntityFrameworkCore.InMemory": "7.0.14",
           "Microsoft.EntityFrameworkCore.SqlServer": "7.0.14",
           "Microsoft.EntityFrameworkCore.Tools": "7.0.14",

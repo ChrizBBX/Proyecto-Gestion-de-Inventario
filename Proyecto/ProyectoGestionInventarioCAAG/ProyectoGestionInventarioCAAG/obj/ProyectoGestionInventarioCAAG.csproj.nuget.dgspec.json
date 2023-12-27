@@ -1,26 +1,38 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\achri\\OneDrive\\Documents\\Github\\Proyecto-Gestion-de-Inventario\\Proyecto\\ProyectoGestionInventarioCAAG\\ProyectoGestionInventarioCAAG\\ProyectoGestionInventarioCAAG.csproj": {}
+    "C:\\Users\\chaguilar\\Downloads\\GithubRepositories\\Proyecto-Gestion-de-Inventario\\Proyecto\\ProyectoGestionInventarioCAAG\\ProyectoGestionInventarioCAAG\\ProyectoGestionInventarioCAAG.csproj": {}
   },
   "projects": {
-    "C:\\Users\\achri\\OneDrive\\Documents\\Github\\Proyecto-Gestion-de-Inventario\\Proyecto\\ProyectoGestionInventarioCAAG\\ProyectoGestionInventarioCAAG\\ProyectoGestionInventarioCAAG.csproj": {
+    "C:\\Users\\chaguilar\\Downloads\\GithubRepositories\\Proyecto-Gestion-de-Inventario\\Proyecto\\ProyectoGestionInventarioCAAG\\ProyectoGestionInventarioCAAG\\ProyectoGestionInventarioCAAG.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\achri\\OneDrive\\Documents\\Github\\Proyecto-Gestion-de-Inventario\\Proyecto\\ProyectoGestionInventarioCAAG\\ProyectoGestionInventarioCAAG\\ProyectoGestionInventarioCAAG.csproj",
+        "projectUniqueName": "C:\\Users\\chaguilar\\Downloads\\GithubRepositories\\Proyecto-Gestion-de-Inventario\\Proyecto\\ProyectoGestionInventarioCAAG\\ProyectoGestionInventarioCAAG\\ProyectoGestionInventarioCAAG.csproj",
         "projectName": "ProyectoGestionInventarioCAAG",
-        "projectPath": "C:\\Users\\achri\\OneDrive\\Documents\\Github\\Proyecto-Gestion-de-Inventario\\Proyecto\\ProyectoGestionInventarioCAAG\\ProyectoGestionInventarioCAAG\\ProyectoGestionInventarioCAAG.csproj",
-        "packagesPath": "C:\\Users\\achri\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\achri\\OneDrive\\Documents\\Github\\Proyecto-Gestion-de-Inventario\\Proyecto\\ProyectoGestionInventarioCAAG\\ProyectoGestionInventarioCAAG\\obj\\",
+        "projectPath": "C:\\Users\\chaguilar\\Downloads\\GithubRepositories\\Proyecto-Gestion-de-Inventario\\Proyecto\\ProyectoGestionInventarioCAAG\\ProyectoGestionInventarioCAAG\\ProyectoGestionInventarioCAAG.csproj",
+        "packagesPath": "C:\\Users\\chaguilar\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\chaguilar\\Downloads\\GithubRepositories\\Proyecto-Gestion-de-Inventario\\Proyecto\\ProyectoGestionInventarioCAAG\\ProyectoGestionInventarioCAAG\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\achri\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\chaguilar\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\DevExpress 18.2.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\DevExpress 18.2\\Components\\System\\Components\\Packages": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
+          "http://sertfs.grupofarsiman.com/FarsimanPackages/nuget": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -75,10 +87,6 @@
               "target": "Package",
               "version": "[11.9.0, )"
             },
-            "Microsoft.EntityFrameworkCore": {
-              "target": "Package",
-              "version": "[7.0.14, )"
-            },
             "Microsoft.EntityFrameworkCore.InMemory": {
               "target": "Package",
               "version": "[7.0.14, )"
@@ -117,7 +125,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.101\\RuntimeIdentifierGraph.json"
         }
       }
     }
