@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentValidation;
+using System;
 using System.Collections.Generic;
 
 namespace ProyectoGestionInventarioCAAG.Infraestructure.Inventario.Entities;
@@ -78,4 +79,13 @@ public partial class Usuario
     public virtual Usuario UsuarioCreacionNavigation { get; set; } = null!;
 
     public virtual Usuario? UsuarioModificacionNavigation { get; set; }
+
+    public class UsuarioValidations : AbstractValidator<Usuario>
+    {
+        public UsuarioValidations()
+        {
+            RuleFor(x => x.UsuarioNombreUsuario).NotEmpty().MaximumLength(100);
+            RuleFor(x => x.UsuarioContrasena).NotEmpty();
+        }
+    }
 }

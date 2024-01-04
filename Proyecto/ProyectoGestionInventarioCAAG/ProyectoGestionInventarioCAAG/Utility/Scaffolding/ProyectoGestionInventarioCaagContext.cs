@@ -264,45 +264,7 @@ public partial class ProyectoGestionInventarioCaagContext : DbContext
 
         modelBuilder.Entity<Salida>(entity =>
         {
-            entity.HasKey(e => e.SalidaId).HasName("PK_Salidas_salidaId");
-
-            entity.Property(e => e.SalidaId).HasColumnName("salidaId");
-            entity.Property(e => e.Activo).HasDefaultValueSql("((1))");
-            entity.Property(e => e.EstadoId).HasColumnName("estadoId");
-            entity.Property(e => e.FechaCreacion).HasColumnType("datetime");
-            entity.Property(e => e.FechaModificacion).HasColumnType("datetime");
-            entity.Property(e => e.SalidaFecha)
-                .HasColumnType("datetime")
-                .HasColumnName("salidaFecha");
-            entity.Property(e => e.SalidaFechaRecibido)
-                .HasColumnType("datetime")
-                .HasColumnName("salidaFechaRecibido");
-            entity.Property(e => e.SalidaTotal)
-                .HasColumnType("decimal(18, 2)")
-                .HasColumnName("salidaTotal");
-            entity.Property(e => e.SucursalId).HasColumnName("sucursalId");
-            entity.Property(e => e.UsuarioCreacion).HasColumnName("usuarioCreacion");
-            entity.Property(e => e.UsuarioId).HasColumnName("usuarioId");
-            entity.Property(e => e.UsuarioModificacion).HasColumnName("usuarioModificacion");
-
-            entity.HasOne(d => d.Sucursal).WithMany(p => p.Salida)
-                .HasForeignKey(d => d.SucursalId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Salidas_sucursalId_Sucursales_sucursalId");
-
-            entity.HasOne(d => d.UsuarioCreacionNavigation).WithMany(p => p.SalidaUsuarioCreacionNavigations)
-                .HasForeignKey(d => d.UsuarioCreacion)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Salidas_usuarioCreacion_Usuarios_usuarioId");
-
-            entity.HasOne(d => d.Usuario).WithMany(p => p.SalidaUsuarios)
-                .HasForeignKey(d => d.UsuarioId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Salidas_UsuarioId_Usuarios_usuarioId");
-
-            entity.HasOne(d => d.UsuarioModificacionNavigation).WithMany(p => p.SalidaUsuarioModificacionNavigations)
-                .HasForeignKey(d => d.UsuarioModificacion)
-                .HasConstraintName("FK_Salidas_usuarioModificacion_Usuarios_usuarioId");
+           
         });
 
         modelBuilder.Entity<SalidasDetalle>(entity =>

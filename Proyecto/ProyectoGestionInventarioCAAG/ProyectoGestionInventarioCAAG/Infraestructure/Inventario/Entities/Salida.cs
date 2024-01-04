@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FluentValidation;
+using ProyectoGestionInventarioCAAG.Utility.Scaffolding;
+using System;
 using System.Collections.Generic;
 
 namespace ProyectoGestionInventarioCAAG.Infraestructure.Inventario.Entities;
@@ -17,7 +19,7 @@ public partial class Salida
 
     public decimal SalidaTotal { get; set; }
 
-    public int EstadoId { get; set; }
+    public int EstadoSalidaId { get; set; }
 
     public int UsuarioCreacion { get; set; }
 
@@ -29,13 +31,24 @@ public partial class Salida
 
     public bool? Activo { get; set; }
 
+    public virtual EstadosSalida EstadoSalida { get; set; } = null!;
+
     public virtual ICollection<SalidasDetalle> SalidasDetalles { get; set; } = new List<SalidasDetalle>();
 
-    public virtual Sucursal Sucursal { get; set; } = null!;
+    public virtual Sucursale Sucursal { get; set; } = null!;
 
     public virtual Usuario Usuario { get; set; } = null!;
 
     public virtual Usuario UsuarioCreacionNavigation { get; set; } = null!;
 
     public virtual Usuario? UsuarioModificacionNavigation { get; set; }
+
+    public class SalidaValidations : AbstractValidator<Salida>
+    {
+        public SalidaValidations()
+        {
+            RuleFor(x => x.SucursalId).NotEmpty();
+            RuleFor(x => x.UsuarioId).NotEmpty();
+        }
+    }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentValidation;
+using System;
 using System.Collections.Generic;
 
 namespace ProyectoGestionInventarioCAAG.Infraestructure.Inventario.Entities;
@@ -34,4 +35,15 @@ public partial class Lote
     public virtual Usuario UsuarioCreacionNavigation { get; set; } = null!;
 
     public virtual Usuario? UsuarioModificacionNavigation { get; set; }
+
+    public class LoteValidations : AbstractValidator<Lote>
+    {
+        public LoteValidations()
+        {
+            RuleFor(x => x.ProductoId).NotEmpty().GreaterThan(0);
+            RuleFor(x => x.LoteCostoCantidad).NotEmpty().GreaterThan(0);
+            RuleFor(x => x.LoteFechaVencimiento).NotEmpty();
+            RuleFor(x => x.LoteCantidad).NotEmpty();
+        }
+    }
 }

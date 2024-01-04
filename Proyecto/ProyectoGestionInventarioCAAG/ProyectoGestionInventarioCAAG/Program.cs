@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ProyectoGestionInventarioCAAG._Features.Empleados;
+using ProyectoGestionInventarioCAAG._Features.Lotes;
+using ProyectoGestionInventarioCAAG._Features.Usuarios;
 using ProyectoGestionInventarioCAAG.Infraestructure.Inventario;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +28,11 @@ builder.Services.AddDbContext<ProyectoGestionInventarioCaagContext>(options => o
 builder.Services.AddTransient<UnitOfWorkBuilder, UnitOfWorkBuilder>();
 builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.AddTransient<EmpleadoService>();
+builder.Services.AddTransient<EmpleadoDomain>();
+builder.Services.AddTransient<UsuarioService>();
+builder.Services.AddTransient<UsuarioDomain>();
+builder.Services.AddTransient<LoteService>();
+builder.Services.AddTransient<LoteDomain>();
 
 //builder.Services.AddFsAuthService(configureOptions =>
 //{

@@ -13,7 +13,7 @@ namespace ProyectoGestionInventarioCAAG.Infraestructure.Inventario.Maps
 
             builder.Property(e => e.SalidaId).HasColumnName("salidaId");
             builder.Property(e => e.Activo).HasDefaultValueSql("((1))");
-            builder.Property(e => e.EstadoId).HasColumnName("estadoId");
+            builder.Property(e => e.EstadoSalidaId).HasColumnName("estadoSalidaId");
             builder.Property(e => e.FechaCreacion).HasColumnType("datetime");
             builder.Property(e => e.FechaModificacion).HasColumnType("datetime");
             builder.Property(e => e.SalidaFecha)
@@ -29,6 +29,11 @@ namespace ProyectoGestionInventarioCAAG.Infraestructure.Inventario.Maps
             builder.Property(e => e.UsuarioCreacion).HasColumnName("usuarioCreacion");
             builder.Property(e => e.UsuarioId).HasColumnName("usuarioId");
             builder.Property(e => e.UsuarioModificacion).HasColumnName("usuarioModificacion");
+
+            builder.HasOne(d => d.EstadoSalida).WithMany(p => p.Salida)
+                .HasForeignKey(d => d.EstadoSalidaId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Salidas_estadoSalidaId_EstadosSalidas_estadoSalidaId");
 
             builder.HasOne(d => d.Sucursal).WithMany(p => p.Salida)
                 .HasForeignKey(d => d.SucursalId)

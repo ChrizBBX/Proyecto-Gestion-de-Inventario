@@ -17,7 +17,7 @@ public partial class Salida
 
     public decimal SalidaTotal { get; set; }
 
-    public int EstadoId { get; set; }
+    public int EstadoSalidaId { get; set; }
 
     public int UsuarioCreacion { get; set; }
 
@@ -28,6 +28,8 @@ public partial class Salida
     public DateTime? FechaModificacion { get; set; }
 
     public bool? Activo { get; set; }
+
+    public virtual EstadosSalida EstadoSalida { get; set; } = null!;
 
     public virtual ICollection<SalidasDetalle> SalidasDetalles { get; set; } = new List<SalidasDetalle>();
 

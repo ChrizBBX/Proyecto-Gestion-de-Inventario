@@ -210,7 +210,7 @@ usuarioId INT NOT NULL,
 salidaFecha DATETIME NOT NULL,
 salidaFechaRecibido DATETIME NOT NULL,
 salidaTotal DECIMAL(18,2) NOT NULL,
-estadoId INT NOT NULL,
+estadoSalidaId INT NOT NULL,
 
 usuarioCreacion INT NOT NULL,
 FechaCreacion DATETIME NOT NULL,
@@ -218,12 +218,15 @@ usuarioModificacion INT,
 FechaModificacion DATETIME,
 Activo BIT DEFAULT 1
 
-CONSTRAINT PK_Salidas_salidaId PRIMARY KEY (salidaId),
+CONSTRAINT PK_Salidas_salidaId PRIMARY KEY (salidaId), 
 CONSTRAINT FK_Salidas_sucursalId_Sucursales_sucursalId FOREIGN KEY (sucursalId) REFERENCES Sucursales (sucursalId),
+CONSTRAINT FK_Salidas_estadoSalidaId_EstadosSalidas_estadoSalidaId FOREIGN KEY (estadoSalidaId) REFERENCES EstadosSalidas (estadoSalidaId),
 CONSTRAINT FK_Salidas_UsuarioId_Usuarios_usuarioId FOREIGN KEY (usuarioId) REFERENCES Usuarios (usuarioId),
 CONSTRAINT FK_Salidas_usuarioCreacion_Usuarios_usuarioId FOREIGN KEY (usuarioCreacion) REFERENCES Usuarios (usuarioId),
 CONSTRAINT FK_Salidas_usuarioModificacion_Usuarios_usuarioId FOREIGN KEY (usuarioModificacion) REFERENCES Usuarios (usuarioId)
 )
+
+GO
 
 CREATE TABLE SalidasDetalle
 (
@@ -244,3 +247,17 @@ CONSTRAINT FK_SalidasDetalle_loteId_Lotes_loteId FOREIGN KEY (loteId) REFERENCES
 CONSTRAINT FK_salidasDetalle_usuarioCreacion_Usuarios_usuarioId FOREIGN KEY (usuarioCreacion) REFERENCES Usuarios (usuarioId),
 CONSTRAINT FK_salidasDetalle_usuarioModificacion_Usuarios_usuarioId FOREIGN KEY (usuarioModificacion) REFERENCES Usuarios (usuarioId)
 )
+
+SELECT * FROM Productos
+SELECT * FROM Lotes
+SELECT * FROM Usuarios
+SELECT * FROM Empleados
+SELECT * FROM Permisos
+SELECT * FROM Perfiles
+SELECT * FROM Usuarios
+SELECT * FROM Salidas
+
+INSERT INTO Productos VALUES ('Acetaminofen',1,GETDATE(),NULL,NULL,1)
+INSERT INTO Productos VALUES ('Paracetamol',1,GETDATE(),NULL,NULL,1)
+INSERT INTO Productos VALUES ('Vitaflenaco',1,GETDATE(),NULL,NULL,1)
+INSERT INTO Productos VALUES ('Panadol Ultra',1,GETDATE(),NULL,NULL,1)
