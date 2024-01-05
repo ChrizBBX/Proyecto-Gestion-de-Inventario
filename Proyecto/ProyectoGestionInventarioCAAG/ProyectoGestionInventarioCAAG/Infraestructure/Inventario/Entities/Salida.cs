@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using ProyectoGestionInventarioCAAG.Utility.Scaffolding;
 using System;
 using System.Collections.Generic;
 
@@ -9,15 +8,17 @@ public partial class Salida
 {
     public int SalidaId { get; set; }
 
+    public int ProductoId { get; set; }
+
     public int SucursalId { get; set; }
 
     public int UsuarioId { get; set; }
 
     public DateTime SalidaFecha { get; set; }
 
-    public DateTime SalidaFechaRecibido { get; set; }
+    public DateTime? SalidaFechaRecibido { get; set; }
 
-    public decimal SalidaTotal { get; set; }
+    public decimal? SalidaTotal { get; set; }
 
     public int EstadoSalidaId { get; set; }
 
@@ -33,9 +34,11 @@ public partial class Salida
 
     public virtual EstadosSalida EstadoSalida { get; set; } = null!;
 
+    public virtual Producto Producto { get; set; } = null!;
+
     public virtual ICollection<SalidasDetalle> SalidasDetalles { get; set; } = new List<SalidasDetalle>();
 
-    public virtual Sucursale Sucursal { get; set; } = null!;
+    public virtual Sucursal Sucursal { get; set; } = null!;
 
     public virtual Usuario Usuario { get; set; } = null!;
 
@@ -47,8 +50,9 @@ public partial class Salida
     {
         public SalidaValidations()
         {
-            RuleFor(x => x.SucursalId).NotEmpty();
-            RuleFor(x => x.UsuarioId).NotEmpty();
+            RuleFor(x => x.SucursalId).NotEmpty().WithMessage("El campo sucursal es requerido");
+            RuleFor(x => x.UsuarioId).NotEmpty().WithMessage("El campo usuario es requerido");
+            RuleFor(x => x.ProductoId).NotEmpty().WithMessage("El campo producto es requerido");
         }
     }
 }

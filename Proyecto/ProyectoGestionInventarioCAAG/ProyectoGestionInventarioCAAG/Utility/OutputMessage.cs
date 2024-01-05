@@ -48,6 +48,8 @@
 
         #region Salidas
         public static string SuccessInsertSalida = "La salida de inventario de ha realizado exitosamente";
+        public static string FaultInsertSalida = "Ha ocurrido un error al realizar la salida";
+        public static string FaultSalidaEntity = "La entidad no es valida o hay campos vacios";
         #endregion
 
         #region Sucursales

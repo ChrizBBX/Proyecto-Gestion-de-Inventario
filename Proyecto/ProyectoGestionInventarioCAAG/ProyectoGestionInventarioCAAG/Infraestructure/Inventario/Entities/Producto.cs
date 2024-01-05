@@ -21,6 +21,8 @@ public partial class Producto
 
     public virtual ICollection<Lote> Lotes { get; set; } = new List<Lote>();
 
+    public virtual ICollection<Salida> Salida { get; set; } = new List<Salida>();
+
     public virtual Usuario UsuarioCreacionNavigation { get; set; } = null!;
 
     public virtual Usuario? UsuarioModificacionNavigation { get; set; }

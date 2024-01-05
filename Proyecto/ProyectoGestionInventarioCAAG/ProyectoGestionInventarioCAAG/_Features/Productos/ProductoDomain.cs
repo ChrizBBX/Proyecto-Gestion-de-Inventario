@@ -10,7 +10,7 @@ namespace ProyectoGestionInventarioCAAG._Features.Productos
         {
             var result = listaProductos.FirstOrDefault(x => x.ProductoId == productoId);
             if (result == null)
-                return Respuesta<bool>.Fault(OutputMessage.FaultProductoNotExists);
+                return Respuesta<bool>.Fault($"{OutputMessage.FaultProductoNotExists}, productoId : {productoId}");
 
             return Respuesta<bool>.Success(true);
         }

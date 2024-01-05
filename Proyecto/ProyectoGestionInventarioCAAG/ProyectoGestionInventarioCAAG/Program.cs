@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ProyectoGestionInventarioCAAG._Features.Empleados;
 using ProyectoGestionInventarioCAAG._Features.Lotes;
+using ProyectoGestionInventarioCAAG._Features.Salidas;
 using ProyectoGestionInventarioCAAG._Features.Usuarios;
 using ProyectoGestionInventarioCAAG.Infraestructure.Inventario;
 
@@ -33,6 +34,8 @@ builder.Services.AddTransient<UsuarioService>();
 builder.Services.AddTransient<UsuarioDomain>();
 builder.Services.AddTransient<LoteService>();
 builder.Services.AddTransient<LoteDomain>();
+builder.Services.AddTransient<SalidaService>();
+builder.Services.AddTransient<SalidaDomain>();
 
 //builder.Services.AddFsAuthService(configureOptions =>
 //{

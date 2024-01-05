@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Utility\Scaffolding\" />
     <Folder Include="_Common\" />
     <Folder Include="_Features\Perfiles\Dtos\" />
   </ItemGroup>

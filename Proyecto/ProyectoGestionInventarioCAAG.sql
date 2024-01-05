@@ -205,11 +205,12 @@ GO
 CREATE TABLE Salidas
 (
 salidaId INT IDENTITY (1,1),
+productoId INT NOT NULL,
 sucursalId INT NOT NULL,
 usuarioId INT NOT NULL,
 salidaFecha DATETIME NOT NULL,
-salidaFechaRecibido DATETIME NOT NULL,
-salidaTotal DECIMAL(18,2) NOT NULL,
+salidaFechaRecibido DATETIME,
+salidaTotal DECIMAL(18,2),
 estadoSalidaId INT NOT NULL,
 
 usuarioCreacion INT NOT NULL,
@@ -220,6 +221,7 @@ Activo BIT DEFAULT 1
 
 CONSTRAINT PK_Salidas_salidaId PRIMARY KEY (salidaId), 
 CONSTRAINT FK_Salidas_sucursalId_Sucursales_sucursalId FOREIGN KEY (sucursalId) REFERENCES Sucursales (sucursalId),
+CONSTRAINT FK_Salidas_productoId_Productos_productoId FOREIGN KEY (productoId) REFERENCES Productos(productoId),
 CONSTRAINT FK_Salidas_estadoSalidaId_EstadosSalidas_estadoSalidaId FOREIGN KEY (estadoSalidaId) REFERENCES EstadosSalidas (estadoSalidaId),
 CONSTRAINT FK_Salidas_UsuarioId_Usuarios_usuarioId FOREIGN KEY (usuarioId) REFERENCES Usuarios (usuarioId),
 CONSTRAINT FK_Salidas_usuarioCreacion_Usuarios_usuarioId FOREIGN KEY (usuarioCreacion) REFERENCES Usuarios (usuarioId),
@@ -249,15 +251,25 @@ CONSTRAINT FK_salidasDetalle_usuarioModificacion_Usuarios_usuarioId FOREIGN KEY 
 )
 
 SELECT * FROM Productos
-SELECT * FROM Lotes
 SELECT * FROM Usuarios
+SELECT * FROM Lotes
 SELECT * FROM Empleados
 SELECT * FROM Permisos
 SELECT * FROM Perfiles
 SELECT * FROM Usuarios
 SELECT * FROM Salidas
+SELECT * FROM SalidasDetalle
+SELECT * FROM Sucursales
+SELECT * FROM EstadosSalidas
 
 INSERT INTO Productos VALUES ('Acetaminofen',1,GETDATE(),NULL,NULL,1)
 INSERT INTO Productos VALUES ('Paracetamol',1,GETDATE(),NULL,NULL,1)
 INSERT INTO Productos VALUES ('Vitaflenaco',1,GETDATE(),NULL,NULL,1)
 INSERT INTO Productos VALUES ('Panadol Ultra',1,GETDATE(),NULL,NULL,1)
+
+INSERT INTO Sucursales VALUES ('Sucursal1',1,GETDATE(),NULL,NULL,1)
+INSERT INTO Sucursales VALUES ('Sucursal2',1,GETDATE(),NULL,NULL,1)
+INSERT INTO Sucursales VALUES ('Sucursal3',1,GETDATE(),NULL,NULL,1)
+
+INSERT INTO EstadosSalidas VALUES ('Enviada a sucursal',1,GETDATE(),NULL,NULL,1)
+INSERT INTO EstadosSalidas VALUES ('Recibida en sucursal',1,GETDATE(),NULL,NULL,1)

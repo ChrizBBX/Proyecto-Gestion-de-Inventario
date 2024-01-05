@@ -16,7 +16,7 @@ public partial class Lote
 
     public DateTime? LoteFechaVencimiento { get; set; }
 
-    public int? LoteCantidad { get; set; }
+    public int LoteCantidad { get; set; }
 
     public int UsuarioCreacion { get; set; }
 

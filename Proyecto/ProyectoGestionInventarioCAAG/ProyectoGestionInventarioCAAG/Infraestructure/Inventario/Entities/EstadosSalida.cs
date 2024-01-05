@@ -19,6 +19,8 @@ public partial class EstadosSalida
 
     public bool? Activo { get; set; }
 
+    public virtual ICollection<Salida> Salida { get; set; } = new List<Salida>();
+
     public virtual Usuario UsuarioCreacionNavigation { get; set; } = null!;
 
     public virtual Usuario? UsuarioModificacionNavigation { get; set; }
