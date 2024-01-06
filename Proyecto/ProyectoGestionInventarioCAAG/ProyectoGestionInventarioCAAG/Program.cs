@@ -1,3 +1,4 @@
+using Farsiman.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using ProyectoGestionInventarioCAAG._Features.Empleados;
 using ProyectoGestionInventarioCAAG._Features.Lotes;
@@ -13,6 +14,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerForFsIdentityServer(opt =>
+{
+    opt.Title = "Proyecto Gestion Salidas de Inventario";
+    opt.Description = "creado por Christopher Aguilar";
+    opt.Version = "v1.0";
+});
 
 builder.Services.AddCors(options =>
 {
@@ -37,18 +44,18 @@ builder.Services.AddTransient<LoteDomain>();
 builder.Services.AddTransient<SalidaService>();
 builder.Services.AddTransient<SalidaDomain>();
 
-//builder.Services.AddFsAuthService(configureOptions =>
-//{
-//    configureOptions.Username = builder.Configuration.GetFromENV("Configurations:FsIdentityServer:Username");
-//    configureOptions.Password = builder.Configuration.GetFromENV("Configurations:FsIdentityServer:Password");
-//});
+builder.Services.AddFsAuthService(configureOptions =>
+{
+    configureOptions.Username = builder.Configuration.GetFromENV("Configurations:FsIdentityServer:Username");
+    configureOptions.Password = builder.Configuration.GetFromENV("Configurations:FsIdentityServer:Password");
+});
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    //app.UseSwaggerWithFsIdentityServer();
+    app.UseSwaggerWithFsIdentityServer();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
@@ -57,7 +64,7 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-//app.UseFsAuthService();
+app.UseFsAuthService();
 
 app.MapControllers();
 

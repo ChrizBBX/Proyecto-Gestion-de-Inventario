@@ -74,6 +74,12 @@ namespace ProyectoGestionInventarioCAAG._Features.Salidas
                 List<Lote> lotesDisponibles = _unitOfWork.Repository<Lote>().AsQueryable().OrderBy(x => x.LoteFechaVencimiento).Where(x => x.ProductoId == entidad.ProductoId && x.LoteCantidad > 0).ToList();
                 if (lotesDisponibles.Count == 0)
                     return Respuesta<string>.Fault(OutputMessage.FaultLotesProductNotStock);
+                
+                int stockDisponible = (from stock in lotesDisponibles
+                                       select stock.LoteCantidad).Sum();
+
+                if (entidad.Cantidad > stockDisponible)
+                    return Respuesta<string>.Fault($"{OutputMessage.FaultNotEnoughStock}, Cantidad Solicitada: {entidad.Cantidad}, Stock Disponible: {stockDisponible}");
 
                 int cantidadRestante = entidad.Cantidad;
                 decimal? total = 0;

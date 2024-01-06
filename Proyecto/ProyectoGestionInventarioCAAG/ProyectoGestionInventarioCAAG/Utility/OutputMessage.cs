@@ -56,6 +56,7 @@
         public static string FaultSucursalMaxPendingValue = "La sucursal ha excedido el valor maximo de salidas en estado pendiendte";
         public static string FaultSalidaNotExists = "La salida seleccionada no existe";
         public static string FaultSalidaAlreadyReceived = "La salida seleccionada ya esta recibida";
+        public static string FaultNotEnoughStock = "No hay stock suficiente para la cantidad de producto solicitada";
         #endregion
 
         #region Sucursales

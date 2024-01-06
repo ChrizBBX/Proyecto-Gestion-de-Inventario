@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ProyectoGestionInventarioCAAG")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9861997b0a254e483fb42fceb9a933196777882b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5c7839d16db50995ac5b030d99b864adf4338ea0")]
 [assembly: System.Reflection.AssemblyProductAttribute("ProyectoGestionInventarioCAAG")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ProyectoGestionInventarioCAAG")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
