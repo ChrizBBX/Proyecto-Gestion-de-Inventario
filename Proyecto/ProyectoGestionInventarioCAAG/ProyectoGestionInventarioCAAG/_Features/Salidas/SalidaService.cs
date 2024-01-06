@@ -11,7 +11,7 @@ using static ProyectoGestionInventarioCAAG.Infraestructure.Inventario.Entities.S
 
 namespace ProyectoGestionInventarioCAAG._Features.Salidas
 {
-    public class SalidaService
+    public class SalidaService : ISalida<SalidaDto>
     {
         private readonly IMapper _mapper;
         private readonly SalidaDomain _salidaDomain;
