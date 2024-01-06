@@ -22,5 +22,19 @@ namespace ProyectoGestionInventarioCAAG.Controllers
             var result = _salidaService.InsertarSalida(entidad);
             return Ok(result);
         }
+
+        [HttpPost("RecibirSalida")]
+        public IActionResult RecibirSalida(SalidaRecibirDto entidad)
+        {
+            var result = _salidaService.RecibirSalida(entidad);
+            return Ok(result);
+        }
+
+        [HttpGet("Reporte")]
+        public IActionResult Reporte(DateTime? fechaInicio, DateTime? fechaFin, int? sucursalId)
+        {
+            var result = _salidaService.Reporte(fechaInicio,fechaFin, sucursalId);
+            return Ok(result);
+        }
     }
 }

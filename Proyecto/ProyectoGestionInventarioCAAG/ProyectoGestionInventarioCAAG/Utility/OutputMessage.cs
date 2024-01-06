@@ -40,6 +40,7 @@
 
         #region Lotes
         public static string SuccessInsertLote = "El lote se ha agregado exitosamente";
+        public static string FaultLotesProductNotStock = "No hay lotes disponibles para el producto seleccionado";
         #endregion
 
         #region Productos
@@ -48,8 +49,13 @@
 
         #region Salidas
         public static string SuccessInsertSalida = "La salida de inventario de ha realizado exitosamente";
+        public static string SuccessReceiveSalida = "La sucursal ha sido recibida exitosamente";
         public static string FaultInsertSalida = "Ha ocurrido un error al realizar la salida";
         public static string FaultSalidaEntity = "La entidad no es valida o hay campos vacios";
+        public static string FaultNotAdmin = "El usuario no tiene permiso de realizar una salida";
+        public static string FaultSucursalMaxPendingValue = "La sucursal ha excedido el valor maximo de salidas en estado pendiendte";
+        public static string FaultSalidaNotExists = "La salida seleccionada no existe";
+        public static string FaultSalidaAlreadyReceived = "La salida seleccionada ya esta recibida";
         #endregion
 
         #region Sucursales

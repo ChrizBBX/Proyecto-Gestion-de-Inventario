@@ -15,6 +15,15 @@ namespace ProyectoGestionInventarioCAAG._Features.Usuarios
 
         public Respuesta<bool> ValidarUsuarioId(List<Usuario> listaUsuarios, int usuarioId)
         {
+            var result = listaUsuarios.FirstOrDefault(x => x.UsuarioId == 1);
+            if (result == null)
+                return Respuesta<bool>.Fault(OutputMessage.FaultCreatorUser);
+            else
+                return Respuesta<bool>.Success(true);
+        }
+
+        public Respuesta<bool> ValidarUsuarioIdNotSalida(List<Usuario> listaUsuarios, int usuarioId)
+        {
             var result = listaUsuarios.FirstOrDefault(x => x.UsuarioId == usuarioId);
             if (result == null)
                 return Respuesta<bool>.Fault(OutputMessage.FaultCreatorUser);

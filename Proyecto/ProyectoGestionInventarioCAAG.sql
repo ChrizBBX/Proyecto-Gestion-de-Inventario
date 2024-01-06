@@ -252,7 +252,7 @@ CONSTRAINT FK_salidasDetalle_usuarioModificacion_Usuarios_usuarioId FOREIGN KEY 
 
 SELECT * FROM Productos
 SELECT * FROM Usuarios
-SELECT * FROM Lotes
+SELECT * FROM Lotes  WHERE productoId = 1 ORDER BY loteFechaVencimiento ASC
 SELECT * FROM Empleados
 SELECT * FROM Permisos
 SELECT * FROM Perfiles
@@ -273,3 +273,9 @@ INSERT INTO Sucursales VALUES ('Sucursal3',1,GETDATE(),NULL,NULL,1)
 
 INSERT INTO EstadosSalidas VALUES ('Enviada a sucursal',1,GETDATE(),NULL,NULL,1)
 INSERT INTO EstadosSalidas VALUES ('Recibida en sucursal',1,GETDATE(),NULL,NULL,1)
+
+DELETE SalidasDetalle
+DELETE Salidas
+
+UPDATE Lotes
+SET loteCantidad = 100
